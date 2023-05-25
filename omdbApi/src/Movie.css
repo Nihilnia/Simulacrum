@@ -1,0 +1,300 @@
+@import url("https://fonts.googleapis.com/css?family=Rubik:400,500&display=swap");
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: "Rubik", sans-serif;
+}
+.container {
+  display: flex;
+  height: 100vh;
+}
+.left {
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  animation-name: left;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  animation-delay: 1s;
+  border: 1px solid gray;
+  height: 200px;
+  margin: 50px;
+  margin-top: 75px;
+  color: aliceblue;
+}
+.right {
+  flex: 1;
+  background-color: black;
+  transition: 1s;
+  /* background-image: url(https://cdnb.artstation.com/p/assets/images/images/048/606/823/large/arkadiy-demchenko-eyes.jpg?1650469095); */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 900px;
+}
+.header > h2 {
+  margin: 0;
+  color: #4f46a5;
+}
+.header > h4 {
+  margin-top: 10px;
+  font-weight: normal;
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.4);
+}
+.form {
+  width: 250px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+.form > p {
+  text-align: right;
+}
+.form > p > a {
+  color: #000;
+  font-size: 14px;
+}
+.form-field {
+  height: 46px;
+  padding: 0 16px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  font-family: "Rubik", sans-serif;
+  outline: 0;
+  transition: 0.2s;
+  margin-top: 20px;
+}
+.form-field:focus {
+  border-color: #0f7ef1;
+}
+.form > button {
+  padding: 12px 10px;
+  border: 0;
+  background: linear-gradient(to right, #de48b5 0%, #0097ff 100%);
+  border-radius: 3px;
+  margin-top: 10px;
+  color: #fff;
+  letter-spacing: 1px;
+  font-family: "Rubik", sans-serif;
+  font-size: 12px;
+}
+.animation {
+  animation-name: move;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+  animation-delay: 2s;
+}
+.a1 {
+  animation-delay: 2s;
+}
+.a2 {
+  animation-delay: 2.1s;
+}
+.a3 {
+  animation-delay: 2.2s;
+}
+.a4 {
+  animation-delay: 2.3s;
+}
+.a5 {
+  animation-delay: 2.4s;
+}
+.a6 {
+  animation-delay: 2.5s;
+}
+@keyframes move {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-40px);
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+@keyframes left {
+  0% {
+    opacity: 0;
+    width: 0;
+  }
+  100% {
+    opacity: 1;
+    padding: 20px 40px;
+    width: 440px;
+  }
+}
+
+@import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,700,800");
+html {
+  box-sizing: border-box;
+}
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+body {
+  background-color: #dce1e5;
+  font-family: "Montserrat", helvetica, arial, sans-serif;
+  font-size: 7px;
+
+  background-color: #0c0c0d;
+  line-height: 1.5;
+  font-weight: 400;
+  overflow-x: hidden;
+}
+* {
+  transition: 0.4s;
+}
+a {
+  text-decoration: none;
+}
+.movie-card {
+  /* background-image: url(http://digitalspyuk.cdnds.net/15/47/1600x800/landscape-1447754794-harrison-ford-blade-runner.jpg); */
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 75%;
+  max-width: 650px;
+  height: 450px;
+  display: block;
+  margin: 8vh auto;
+  border-radius: 8px;
+  box-shadow: 0px 8px 12px 0px rgba(0, 0, 0, 0.25);
+}
+.color-overlay {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  background: linear-gradient(
+    to right,
+    rgba(42, 159, 255, 0.2) 0%,
+    #212120 60%,
+    #212120 100%
+  );
+  background-blend-mode: multiply;
+}
+h1,
+h2,
+h3 {
+  font-family: "Montserrat", helvetica, arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  line-height: 1;
+  font-weight: 400;
+}
+.movie-content {
+  width: 40%;
+  display: block;
+  position: relative;
+  float: right;
+  padding-right: 1em;
+}
+.movie-content .movie-title {
+  color: #ffffff;
+  margin-bottom: 0.25em;
+  opacity: 0.75;
+}
+.movie-content .movie-info {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 2em;
+  color: #2a9fff;
+  line-height: 1;
+  margin: 0;
+  font-weight: 700;
+  opacity: 0.5;
+}
+.movie-content .movie-header {
+  margin-bottom: 2em;
+}
+.movie-content .movie-desc {
+  font-weight: 300;
+  font-size: 2em;
+  opacity: 0.84;
+  margin-bottom: 2em;
+}
+.btn {
+  padding: 0.8em 2em;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+.btn-outline {
+  background-color: transparent;
+  border: 3px solid #ffffff;
+}
+.btn::before {
+  font-family: "Material Icons";
+  content: "\e037";
+  vertical-align: middle;
+  font-size: 1.5em;
+  padding-right: 0.5em;
+}
+.btn-outline:hover {
+  border-color: #2a9fff;
+  color: #2a9fff;
+  box-shadow: 0px 1px 8px 0px rgba(245, 199, 0, 0.2);
+}
+.movie-share {
+  padding: 1em;
+  display: inline-block;
+  width: 15%;
+}
+.movie-share__icon i {
+  font-size: 2em;
+  margin-left: 0.5em;
+  color: #ffffff;
+  mix-blend-mode: lighten;
+  opacity: 0.8;
+}
+.movie-share__icon i:hover {
+  opacity: 1;
+  mix-blend-mode: lighten;
+}
+@media (max-width: 1000px) {
+  .movie-content {
+    width: 50%;
+    max-width: 95%;
+  }
+}
+@media (max-width: 800px) {
+  .movie-card {
+    width: 95%;
+    max-width: 95%;
+  }
+}
+@media (max-width: 600px) {
+  .movie-card,
+  .movie-card:nth-child(2),
+  .movie-card:nth-child(3) {
+    background-position: 50% 0%;
+    background-size: cover;
+    height: 400px;
+  }
+  .color-overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(42, 159, 255, 0.2) 0%,
+      #212120 60%,
+      #212120 100%
+    );
+  }
+  .movie-content {
+    margin-top: 4.2em;
+    width: 90%;
+  }
+  .movie-share {
+    display: block;
+    width: 100%;
+  }
+}

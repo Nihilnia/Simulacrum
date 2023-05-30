@@ -4,14 +4,28 @@ import { onSnapshot, doc, addDoc, deleteDoc, setDoc } from "firebase/firestore";
 
 import Login from "./Login/Login.jsx";
 import Register from "./Register/Register";
+import Dashboard from "./Dashboard/Dashboard";
 
-import "./App.css";
+// import "./App.css";
 
 export default function App() {
   const [userz, setUserz] = useState([]);
   const [tempData, setTempData] = useState({
     userName: "",
     passWord: "",
+  });
+  const [page, setPage] = useState("Login");
+
+  const handlePaging = (e, incominPage) => {
+    setPage(incominPage);
+
+    return page;
+  };
+
+  const [loggedUser, setLoggedUser] = useState("");
+
+  const [newTodo, setNewTodo] = useState({
+    toDoName: "",
   });
 
   useEffect(() => {
@@ -50,26 +64,52 @@ export default function App() {
     if (e.key == "Enter") {
       e.preventDefault();
 
-      let getUsername = userz.filter(
+      let getUserInfo = userz.filter(
         (user) => user.userName == tempData.userName
       );
 
-      getUsername.length > 0
-        ? getUsername[0].passWord == tempData.passWord
-          ? console.log("%cLogin succesful..", "color: orange")
-          : console.log("%cPassword is wrong.", "color: orange")
-        : console.log("%cUser not found..", "color: orange");
+      console.log("When new username is av..");
+      console.log(getUserInfo);
+
+      //? Check if the user trying to log- in or registerin'
+      if (page == "Register") {
+        //TODO: Check if the username is available.
+        if (getUserInfo.length == 0) {
+          console.log("mor yazma");
+
+          console.log("TempData");
+          console.log(tempData);
+
+          const newUser = async () => {
+            const refRegister = await addDoc(userzCollection, tempData);
+          };
+
+          newUser();
+        } else {
+          console.log("%cThis username is taken.", "color: orange");
+        }
+      } else if (page == "Login") {
+        // getUserInfo.length > 0
+        //   ? getUserInfo[0].passWord == tempData.passWord
+        //     ? console.log("%cLogin succesful..", "color: orange")
+        //     : console.log("%cPassword is wrong.", "color: orange")
+        //   : console.log("%cUser not found..", "color: orange");
+
+        if (getUserInfo.length > 0) {
+          if (getUserInfo[0].passWord == tempData.passWord) {
+            console.log("%cLogin succesful..", "color: orange");
+            setLoggedUser(getUserInfo[0]);
+            setPage("Dashboard");
+          } else {
+            console.log("%cPassword is wrong.", "color: orange");
+          }
+        } else {
+          console.log("%cUser not found..", "color: orange");
+        }
+      }
 
       e.target.parentElement.reset();
     }
-  };
-
-  const [page, setPage] = useState("Login");
-
-  const handlePaging = (e, incominPage) => {
-    setPage(incominPage);
-
-    return page;
   };
 
   return (
@@ -88,6 +128,7 @@ export default function App() {
           handlePaging={handlePaging}
         />
       )}
+      {page == "Dashboard" && <Dashboard loggedUser={loggedUser} />}
     </>
   );
 }

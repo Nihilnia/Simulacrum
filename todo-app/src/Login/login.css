@@ -5,12 +5,12 @@
   margin: 0;
   box-sizing: border-box;
 }
-body {
+.body--login {
   background-color: #080710;
   background-image: url("./loginBG.jpg");
   background-size: cover;
 }
-.background {
+.background--login {
   width: 430px;
   height: 520px;
   position: absolute;
@@ -18,7 +18,7 @@ body {
   left: 50%;
   top: 50%;
 }
-.background .shape {
+.background--login .shape {
   height: 200px;
   width: 200px;
   position: absolute;
@@ -34,7 +34,7 @@ body {
   right: -30px;
   bottom: -80px;
 } */
-form {
+.form--login {
   height: 520px;
   width: 400px;
   background-color: rgba(255, 255, 255, 0.13);
@@ -48,27 +48,27 @@ form {
   box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
   padding: 50px 35px;
 }
-form * {
+.form--login * {
   font-family: "Poppins", sans-serif;
   color: #ffffff;
   letter-spacing: 0.5px;
   outline: none;
   border: none;
 }
-form h3 {
+.form--login h3 {
   font-size: 32px;
   font-weight: 500;
   line-height: 42px;
   text-align: center;
 }
 
-label {
+.label--login {
   display: block;
   margin-top: 30px;
   font-size: 16px;
   font-weight: 500;
 }
-input {
+.input--login {
   display: block;
   height: 50px;
   width: 100%;
@@ -82,10 +82,9 @@ input {
 ::placeholder {
   color: #e5e5e5;
 }
-button {
+.button--login {
   margin-top: 50px;
   width: 100%;
-  background-color: #ffffff;
   color: #080710;
   padding: 15px 0;
   font-size: 18px;
@@ -93,11 +92,11 @@ button {
   border-radius: 5px;
   cursor: pointer;
 }
-.social {
+.social--login {
   margin-top: 30px;
   display: flex;
 }
-.social div {
+.social--login div {
   background: red;
   width: 150px;
   border-radius: 3px;
@@ -106,12 +105,12 @@ button {
   color: #eaf0fb;
   text-align: center;
 }
-.social div:hover {
+.social--login div:hover {
   background-color: rgba(255, 255, 255, 0.47);
 }
-.social .fb {
+.social--login .fb {
   margin-left: 25px;
 }
-.social i {
+.social--login i {
   margin-right: 4px;
 }

@@ -1,13 +1,18 @@
 import "./register.css";
+import Modal from "../Modal/Modal";
 
 export default function Register(props) {
   document.body.classList.remove("body--login");
   document.body.classList.add("body--register");
 
-  const { handleChange, handleSubmit, handlePaging } = props;
+  const { handleChange, handleSubmit, handlePaging, showModal, setShowModal } =
+    props;
 
   return (
     <>
+      {showModal.isShow && (
+        <Modal showModal={showModal} setShowModal={setShowModal} />
+      )}
       <div className="background--register">
         <div className="shape--register"></div>
         <div className="shape--register"></div>
@@ -37,8 +42,17 @@ export default function Register(props) {
           onChange={handleChange}
         />
 
-        <button className="button--register">Register</button>
-        <a onClick={(e) => handlePaging(e, "Register")}>Back to login!</a>
+        <button className="button--register" onClick={(e) => handleSubmit(e)}>
+          Register
+        </button>
+        <a
+          style={{ color: "aliceblue" }}
+          onClick={(e) => {
+            handlePaging(e, "Login");
+          }}
+        >
+          Back to login!
+        </a>
       </form>
     </>
   );

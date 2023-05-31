@@ -5,6 +5,7 @@ import { onSnapshot, doc, addDoc, deleteDoc, setDoc } from "firebase/firestore";
 import Login from "./Login/Login.jsx";
 import Register from "./Register/Register";
 import Dashboard from "./Dashboard/Dashboard";
+import Modal from "./Modal/Modal";
 
 // import "./App.css";
 
@@ -15,10 +16,17 @@ export default function App() {
     passWord: "",
   });
   const [page, setPage] = useState("Login");
+  const [showModal, setShowModal] = useState({
+    isShow: false,
+    userName: "",
+    information: "",
+  });
 
   const handlePaging = (e, incominPage) => {
     setPage(incominPage);
-
+    setShowModal((prev) => {
+      return { ...prev, isShow: false };
+    });
     return page;
   };
 
@@ -50,7 +58,10 @@ export default function App() {
   }, []);
 
   const handleChange = (e) => {
-    console.log("Change happened..");
+    page == "Login"
+      ? console.log("User trying to login..")
+      : console.log("User trying to register..");
+    // console.log("Change happened..");
     // console.log(e.target);
 
     const { name, value } = e.target;
@@ -61,15 +72,16 @@ export default function App() {
   };
 
   const handleSubmit = (e) => {
-    if (e.key == "Enter") {
+    console.log(e);
+    if (e.key == "Enter" || e.type == "click") {
       e.preventDefault();
 
       let getUserInfo = userz.filter(
         (user) => user.userName == tempData.userName
       );
 
-      console.log("When new username is av..");
-      console.log(getUserInfo);
+      // console.log("When new username is av..");
+      // console.log(getUserInfo);
 
       //? Check if the user trying to log- in or registerin'
       if (page == "Register") {
@@ -85,16 +97,24 @@ export default function App() {
           };
 
           newUser();
+          setShowModal(() => {
+            return {
+              isShow: true,
+              information: "Register completed. You can log- in.",
+              userName: tempData.userName,
+            };
+          });
         } else {
           console.log("%cThis username is taken.", "color: orange");
+          setShowModal(() => {
+            return {
+              isShow: true,
+              information: "This username is taken.",
+              userName: tempData.userName,
+            };
+          });
         }
       } else if (page == "Login") {
-        // getUserInfo.length > 0
-        //   ? getUserInfo[0].passWord == tempData.passWord
-        //     ? console.log("%cLogin succesful..", "color: orange")
-        //     : console.log("%cPassword is wrong.", "color: orange")
-        //   : console.log("%cUser not found..", "color: orange");
-
         if (getUserInfo.length > 0) {
           if (getUserInfo[0].passWord == tempData.passWord) {
             console.log("%cLogin succesful..", "color: orange");
@@ -102,15 +122,31 @@ export default function App() {
             setPage("Dashboard");
           } else {
             console.log("%cPassword is wrong.", "color: orange");
+            setShowModal(() => {
+              return {
+                isShow: true,
+                information: "Password is wrong.",
+                userName: tempData.userName,
+              };
+            });
           }
         } else {
           console.log("%cUser not found..", "color: orange");
+          setShowModal(() => {
+            return {
+              isShow: true,
+              information: "User not found.",
+              userName: tempData.userName,
+            };
+          });
         }
       }
 
       e.target.parentElement.reset();
     }
   };
+
+  console.log("Modal is:" + showModal);
 
   return (
     <>
@@ -119,6 +155,8 @@ export default function App() {
           handleChange={handleChange}
           handleSubmit={handleSubmit}
           handlePaging={handlePaging}
+          showModal={showModal}
+          setShowModal={setShowModal}
         />
       )}
       {page == "Register" && (
@@ -126,6 +164,8 @@ export default function App() {
           handleChange={handleChange}
           handleSubmit={handleSubmit}
           handlePaging={handlePaging}
+          showModal={showModal}
+          setShowModal={setShowModal}
         />
       )}
       {page == "Dashboard" && <Dashboard loggedUser={loggedUser} />}

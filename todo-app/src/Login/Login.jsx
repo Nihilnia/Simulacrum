@@ -1,13 +1,21 @@
+import Modal from "../Modal/Modal";
+
 import "./login.css";
 
 export default function Login(props) {
   document.body.classList.remove("body--register");
   document.body.classList.add("body--login");
 
-  const { handleChange, handleSubmit, handlePaging } = props;
+  const { handleChange, handleSubmit, handlePaging, showModal, setShowModal } =
+    props;
+
+  console.log("Modal is:" + showModal);
 
   return (
     <>
+      {showModal.isShow && (
+        <Modal showModal={showModal} setShowModal={setShowModal} />
+      )}
       <div className="background--login">
         <div className="shape--login"></div>
         <div className="shape--login"></div>
@@ -37,8 +45,15 @@ export default function Login(props) {
           onChange={handleChange}
         />
 
-        <button className="button--login">Log In</button>
-        <a onClick={(e) => handlePaging(e, "Register")}>
+        <button className="button--login" onClick={(e) => handleSubmit(e)}>
+          Log In
+        </button>
+        <a
+          style={{ color: "aliceblue" }}
+          onClick={(e) => {
+            handlePaging(e, "Register");
+          }}
+        >
           Need acc? Register here!
         </a>
       </form>

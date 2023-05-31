@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { todozCollection, db } from "../Firebase";
 import { onSnapshot, doc, addDoc, deleteDoc, setDoc } from "firebase/firestore";
 
+import Profile from "../Profile/Profile";
+
 import "../Dashboard/Dashboard.css";
 
 export default function Dashboard(props) {
@@ -17,27 +19,44 @@ export default function Dashboard(props) {
     situation: 0,
   });
   const [allTodoz, setAllTodoz] = useState(null);
+  const [completedTodoz, setCompletedTodoz] = useState(null);
+  const [waitingTodoz, setWaitingTodoz] = useState(null);
+  const [userChoice, setUserChoice] = useState("allTodoz");
 
-  console.log("All todoz of user:");
-  console.log(allTodoz);
+  // console.log("All todoz of user:");
+  // console.log(allTodoz);
   useEffect(() => {
     //? Watching the Database
     const unsub = onSnapshot(todozCollection, (snapshot) => {
-      console.log("Todoz in the database are changing..");
-      console.log(`Logged User: ${JSON.stringify(loggedUser)}`);
+      console.log("%cTodoz in the database are changing..", "color: orange");
+      console.log(`Logged User: ${JSON.stringify(loggedUser.userName)}`);
       const userzTodoz = snapshot.docs.map((todo) => {
         return {
           id: todo.id,
           ...todo.data(),
         };
       });
-      console.log(userzTodoz); //Gettin all the todos.. this is bad but nvm for now.
+      // console.log(userzTodoz); //!Gettin all the todos.. this is bad but nvm for now.
       //? READIN':
-      userzTodoz.length > 0
-        ? setAllTodoz(() =>
-            userzTodoz.filter((td) => td.userName == loggedUser.userName)
-          )
-        : setAllTodoz(null);
+      if (userzTodoz.length > 0 && userzTodoz != null) {
+        setAllTodoz(() =>
+          userzTodoz.filter((td) => td.userName == loggedUser.userName)
+        );
+        setWaitingTodoz(() => {
+          return userzTodoz.filter(
+            (todo) =>
+              todo.situation == 0 && todo.userName == loggedUser.userName
+          );
+        });
+        setCompletedTodoz(() => {
+          return userzTodoz.filter(
+            (todo) =>
+              todo.situation == 1 && todo.userName == loggedUser.userName
+          );
+        });
+      } else {
+        setAllTodoz(null);
+      }
     });
 
     return unsub;
@@ -79,13 +98,15 @@ export default function Dashboard(props) {
     );
   };
 
+  //ALL TODOZ
   const elementzTodoz = allTodoz?.map((todoz) => {
     // return <h2>Todo: {todoz.toDo}</h2>;
+    // console.log(`Todo' z id: ${todoz.id}`);
     return (
       <>
         <div
           className="todo--bg-1"
-          key={todoz.id}
+          key={allTodoz.indexOf(todoz.id)}
           onClick={(e) => handleCompleteToDo(e, todoz.id, todoz.situation)}
         >
           <h2
@@ -102,6 +123,60 @@ export default function Dashboard(props) {
       </>
     );
   });
+  // //Completed TODOZ
+  const elementCompletedTodoz = completedTodoz?.map((todoz) => {
+    // return <h2>Todo: {todoz.toDo}</h2>;
+    // console.log(`Todo' z id: ${todoz.id}`);
+    return (
+      <>
+        <div
+          className="todo--bg-1"
+          key={allTodoz.indexOf(todoz.id)}
+          onClick={(e) => handleCompleteToDo(e, todoz.id, todoz.situation)}
+        >
+          <h2
+            style={
+              todoz.situation == 0
+                ? { textDecoration: "none" }
+                : { textDecoration: "line-through" }
+            }
+          >
+            {todoz.toDo}
+          </h2>
+          <p>{todoz.situation == 0 ? "Todo" : "Done"}</p>
+        </div>
+      </>
+    );
+  });
+  // //Waiting TODOZ
+  const elementWaitingTodoz = waitingTodoz?.map((todoz) => {
+    // return <h2>Todo: {todoz.toDo}</h2>;
+    // console.log(`Todo' z id: ${todoz.id}`);
+    return (
+      <>
+        <div
+          className="todo--bg-1"
+          key={allTodoz.indexOf(todoz.id)}
+          onClick={(e) => handleCompleteToDo(e, todoz.id, todoz.situation)}
+        >
+          <h2
+            style={
+              todoz.situation == 0
+                ? { textDecoration: "none" }
+                : { textDecoration: "line-through" }
+            }
+          >
+            {todoz.toDo}
+          </h2>
+          <p>{todoz.situation == 0 ? "Todo" : "Done"}</p>
+        </div>
+      </>
+    );
+  });
+
+  console.log(elementzTodoz);
+  console.log(completedTodoz);
+  console.log(waitingTodoz);
 
   return (
     <>
@@ -123,7 +198,6 @@ export default function Dashboard(props) {
           </div>
         </div>
       </div>
-
       {setTimeout(() => {
         document
           .querySelector(".loading--container")
@@ -132,27 +206,71 @@ export default function Dashboard(props) {
           .querySelector(".loading--after")
           .classList.replace("visibilityHidden", "visibilityVisible");
       }, 3000)}
+
       <div className="loading--after visibilityHidden">
-        <h2 className="user--header">Welcome: {loggedUser.userName}</h2>
-        <form
-          className="form__group field newTodo"
-          onKeyPress={handleNewTodoEnter}
-        >
-          <input
-            type="input"
-            className="form__field"
-            placeholder="Add new to-do item"
-            name="toDo"
-            id="toDo"
-            onChange={(e) => handleNewTodo(e, loggedUser)}
-            required
+        <div className="navbar--back"></div>
+        <nav>
+          <a onClick={() => setUserChoice("allTodoz")}>All Todoz</a>
+          <a
+            onClick={() => {
+              setUserChoice("waitingTodoz");
+            }}
+          >
+            Waiting to do
+          </a>
+          <a
+            onClick={() => {
+              setUserChoice("completedTodoz");
+            }}
+          >
+            Completed
+          </a>
+          <a
+            onClick={() => {
+              setUserChoice("Profile");
+            }}
+          >
+            Profile
+          </a>
+        </nav>
+        <h2 className="user--header">
+          {userChoice == "allTodoz" && "Welcome:"}
+          {userChoice == "completedTodoz" && "Great job:"}
+          {userChoice == "waitingTodoz" && "Move your ass:"}{" "}
+          {userChoice != "Profile" && loggedUser.userName}
+        </h2>
+        {userChoice == "allTodoz" && (
+          <form
+            className="form__group field newTodo"
+            onKeyPress={handleNewTodoEnter}
+          >
+            <input
+              type="input"
+              className="form__field"
+              placeholder="Add new to-do item"
+              name="toDo"
+              id="toDo"
+              onChange={(e) => handleNewTodo(e, loggedUser)}
+              required
+            />
+            <label htmlFor="toDo" className="form__label">
+              Add new to-do item
+            </label>
+          </form>
+        )}
+        {userChoice == "Profile" && (
+          <Profile
+            setUserChoice={setUserChoice}
+            user={loggedUser}
+            completedTodoCount={completedTodoz.length}
+            waitingTodoCount={waitingTodoz.length}
+            allTodoCount={allTodoz.length}
           />
-          <label htmlFor="toDo" className="form__label">
-            Add new to-do item
-          </label>
-        </form>
+        )}
         <div className="todo--container">
-          {allTodoz != null && elementzTodoz}
+          {userChoice == "allTodoz" && elementzTodoz}
+          {userChoice == "completedTodoz" && elementCompletedTodoz}
+          {userChoice == "waitingTodoz" && elementWaitingTodoz}
         </div>
       </div>
     </>

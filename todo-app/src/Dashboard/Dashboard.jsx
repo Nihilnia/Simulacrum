@@ -8,7 +8,7 @@ import "../Dashboard/Dashboard.css";
 
 export default function Dashboard(props) {
   document.body.classList.remove("body--login");
-  document.body.classList.add("body--dashboard");
+  document.body.classList.add("gradient-background");
   document.body.classList.add("body--newTodo");
 
   const { loggedUser } = props;
@@ -118,7 +118,14 @@ export default function Dashboard(props) {
           >
             {todoz.toDo}
           </h2>
-          <p>{todoz.situation == 0 ? "Todo" : "Done"}</p>
+          <p className="todo--done">
+            {todoz.situation == 0 ? "Todo" : "Done"}&nbsp;&nbsp;
+            {todoz.situation == 0 ? (
+              ""
+            ) : (
+              <i className="fa-solid fa-check fa-sm"></i>
+            )}
+          </p>
         </div>
       </>
     );
@@ -174,9 +181,9 @@ export default function Dashboard(props) {
     );
   });
 
-  console.log(elementzTodoz);
-  console.log(completedTodoz);
-  console.log(waitingTodoz);
+  // console.log(elementzTodoz);
+  // console.log(completedTodoz);
+  // console.log(waitingTodoz);
 
   return (
     <>
@@ -204,33 +211,45 @@ export default function Dashboard(props) {
           .classList.add("loading--hide");
         document
           .querySelector(".loading--after")
-          .classList.replace("visibilityHidden", "visibilityVisible");
+          .classList.add("visibilityHidden", "visibilityVisible");
       }, 3000)}
-
-      <div className="loading--after visibilityHidden">
+      <div className="loading--after visibilityHidden gradient-background">
         <div className="navbar--back"></div>
         <nav>
-          <a onClick={() => setUserChoice("allTodoz")}>All Todoz</a>
+          <a onClick={() => setUserChoice("allTodoz")}>
+            All Todoz&nbsp;&nbsp;<i class="fa-solid fa-list-check fa-lg"></i>
+          </a>
+          &nbsp;|&nbsp;
           <a
             onClick={() => {
               setUserChoice("waitingTodoz");
+              console.log("%cUser went to waiting todoz.", "color: orange");
             }}
           >
-            Waiting to do
+            Waiting to do&nbsp;&nbsp;
+            <i class="fa-brands fa-phoenix-framework fa-lg"></i>
           </a>
+          &nbsp;|&nbsp;
           <a
             onClick={() => {
               setUserChoice("completedTodoz");
+              console.log("%cUser went to completed todoz.", "color: orange");
             }}
           >
-            Completed
+            Completed&nbsp;&nbsp;<i class="fa-solid fa-check fa-lg"></i>
           </a>
+          &nbsp;|&nbsp;
           <a
             onClick={() => {
               setUserChoice("Profile");
+              console.log("%cUser went to Profile page.", "color: orange");
             }}
           >
-            Profile
+            Profile&nbsp;&nbsp;<i class="fa-solid fa-user fa-lg"></i>
+          </a>
+          &nbsp;|&nbsp;
+          <a href="/">
+            Logout <i class="fa-solid fa-power-off fa-lg"></i>
           </a>
         </nav>
         <h2 className="user--header">
@@ -238,6 +257,7 @@ export default function Dashboard(props) {
           {userChoice == "completedTodoz" && "Great job:"}
           {userChoice == "waitingTodoz" && "Move your ass:"}{" "}
           {userChoice != "Profile" && loggedUser.userName}
+          {userChoice == "Profile" && "Profile"}
         </h2>
         {userChoice == "allTodoz" && (
           <form
@@ -267,7 +287,7 @@ export default function Dashboard(props) {
             allTodoCount={allTodoz.length}
           />
         )}
-        <div className="todo--container">
+        <div className="todo--container" style={{ width: "90%" }}>
           {userChoice == "allTodoz" && elementzTodoz}
           {userChoice == "completedTodoz" && elementCompletedTodoz}
           {userChoice == "waitingTodoz" && elementWaitingTodoz}

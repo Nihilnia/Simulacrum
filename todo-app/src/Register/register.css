@@ -35,6 +35,7 @@
   bottom: -80px;
 } */
 .form--register {
+  font-family: "Montserrat Alternates", sans-serif;
   height: 520px;
   width: 400px;
   background-color: rgba(255, 255, 255, 0.13);
@@ -49,7 +50,6 @@
   padding: 50px 35px;
 }
 .form--register * {
-  font-family: "Poppins", sans-serif;
   color: #ffffff;
   letter-spacing: 0.5px;
   outline: none;
@@ -82,6 +82,7 @@
 ::placeholder {
   color: #e5e5e5;
 }
+@import url("https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@300&display=swap");
 .button--register {
   margin-top: 50px;
   width: 100%;

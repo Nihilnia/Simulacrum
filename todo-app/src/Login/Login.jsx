@@ -9,7 +9,7 @@ export default function Login(props) {
   const { handleChange, handleSubmit, handlePaging, showModal, setShowModal } =
     props;
 
-  console.log("Modal is:" + showModal);
+  // console.log("Modal is:" + showModal);
 
   return (
     <>
@@ -32,6 +32,7 @@ export default function Login(props) {
           type="text"
           name="userName"
           onChange={handleChange}
+          required
         />
 
         <label htmlFor="password" className="label--login">
@@ -43,6 +44,7 @@ export default function Login(props) {
           type="password"
           name="passWord"
           onChange={handleChange}
+          required
         />
 
         <button className="button--login" onClick={(e) => handleSubmit(e)}>

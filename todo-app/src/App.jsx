@@ -72,7 +72,7 @@ export default function App() {
   };
 
   const handleSubmit = (e) => {
-    console.log(e);
+    // console.log(e);
     if (e.key == "Enter" || e.type == "click") {
       e.preventDefault();
 
@@ -146,7 +146,7 @@ export default function App() {
     }
   };
 
-  console.log("Modal is:" + showModal);
+  // console.log("Modal is:" + showModal);
 
   return (
     <>

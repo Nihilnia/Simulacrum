@@ -3,6 +3,25 @@
   src: url("./Virgil.woff2");
 }
 
+.gradient-background {
+  background: linear-gradient(292deg, #020024, #0a0a49, #7c0220);
+  background-size: 180% 180%;
+  animation: gradient-animation 6s ease infinite;
+  color: aliceblue;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .body--dashboard {
   background-color: #080710;
   /* background-image: url("./dashboardBG.jpg");
@@ -93,7 +112,7 @@
 }
 /* demo */
 .newTodo {
-  font-family: "Oswald", sans-serif;
+  font-family: "Montserrat Alternates", sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -102,6 +121,10 @@
   margin-left: 800px;
   width: 500px;
   margin-top: 50px;
+  margin-bottom: 50px;
+  margin: auto;
+  min-width: 600px;
+  padding: 10px;
 }
 
 /* * {
@@ -167,6 +190,13 @@ div p {
 
 .todo--bg-1 {
   background-image: url(https://i.postimg.cc/1RTV9F6V/filip-zrnzevic-Qs-WG0kj-PQRY-unsplash.jpg);
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.09);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5.8px);
+  -webkit-backdrop-filter: blur(5.8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .todo--bg-2 {
@@ -175,7 +205,17 @@ div p {
 
 /* User */
 .user--header {
-  margin-left: 950px;
+  margin: auto;
+  width: 15%;
+  padding: 10px;
+  font-family: "Montserrat Alternates", sans-serif;
+  text-align: center;
+  font-weight: 300;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(17, 25, 40, 0.75);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
 }
 
 /* L O A D I N G */
@@ -350,7 +390,7 @@ div p {
 }
 
 /* N A V B A R */
-@import url("https://fonts.googleapis.com/css?family=Oswald:500");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;1,300&display=swap");
 .back {
   position: fixed;
   left: 0;
@@ -375,7 +415,7 @@ nav {
   text-align: center;
 }
 nav a {
-  font-family: "Oswald", sans-serif;
+  font-family: "Montserrat Alternates", sans-serif;
   font-weight: 500;
   text-transform: uppercase;
   text-decoration: none;
@@ -385,6 +425,7 @@ nav a {
   letter-spacing: 1px;
   position: relative;
   display: inline-block;
+  font-weight: 300;
 }
 nav a:before {
   content: "";
@@ -433,21 +474,38 @@ nav a:hover:before {
   }
 }
 nav a:nth-child(1) {
-  animation: show 0.2s 1.1s ease 1 both;
+  animation: show 0.2s 3.1s ease 1 both;
 }
 nav a:nth-child(2) {
-  animation: show 0.2s 1.2s ease 1 both;
+  animation: show 0.2s 3.3s ease 1 both;
 }
 nav a:nth-child(3) {
-  animation: show 0.2s 1.3s ease 1 both;
+  animation: show 0.2s 3.5s ease 1 both;
 }
 nav a:nth-child(4) {
-  animation: show 0.2s 1.4s ease 1 both;
+  animation: show 0.2s 3.7s ease 1 both;
 }
 nav a:nth-child(5) {
-  animation: show 0.2s 1.5s ease 1 both;
+  animation: show 0.2s 3.9s ease 1 both;
 }
 
 .loading--after {
   margin-top: 80px;
+  min-height: 1080px;
+  height: auto;
+}
+
+.todo--container {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  font-family: "Montserrat Alternates Thin", sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  text-align: center;
+}
+
+.todo--done {
+  font-style: italic;
+  font-family: "Montserrat Alternates Light", sans-serif;
 }

@@ -77,6 +77,12 @@ export default function Profile(props) {
               >
                 <img src={defWoman} title="" alt="" />
               </div>
+              <h6
+                className="profile--theme-color profile--lead"
+                style={{ marginLeft: "200px", marginTop: "15px" }}
+              >
+                <span style={{ color: "aliceblue" }}>User ID:</span> {user.id}
+              </h6>
             </div>
           </div>
           <div className="profile--counter">

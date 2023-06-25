@@ -217,7 +217,8 @@ export default function Dashboard(props) {
         <div className="navbar--back"></div>
         <nav>
           <a onClick={() => setUserChoice("allTodoz")}>
-            All Todoz&nbsp;&nbsp;<i class="fa-solid fa-list-check fa-lg"></i>
+            All Todoz&nbsp;&nbsp;
+            <i className="fa-solid fa-list-check fa-lg"></i>
           </a>
           &nbsp;|&nbsp;
           <a
@@ -227,7 +228,7 @@ export default function Dashboard(props) {
             }}
           >
             Waiting to do&nbsp;&nbsp;
-            <i class="fa-brands fa-phoenix-framework fa-lg"></i>
+            <i className="fa-brands fa-phoenix-framework fa-lg"></i>
           </a>
           &nbsp;|&nbsp;
           <a
@@ -236,7 +237,7 @@ export default function Dashboard(props) {
               console.log("%cUser went to completed todoz.", "color: orange");
             }}
           >
-            Completed&nbsp;&nbsp;<i class="fa-solid fa-check fa-lg"></i>
+            Completed&nbsp;&nbsp;<i className="fa-solid fa-check fa-lg"></i>
           </a>
           &nbsp;|&nbsp;
           <a
@@ -245,11 +246,11 @@ export default function Dashboard(props) {
               console.log("%cUser went to Profile page.", "color: orange");
             }}
           >
-            Profile&nbsp;&nbsp;<i class="fa-solid fa-user fa-lg"></i>
+            Profile&nbsp;&nbsp;<i className="fa-solid fa-user fa-lg"></i>
           </a>
           &nbsp;|&nbsp;
           <a href="/">
-            Logout <i class="fa-solid fa-power-off fa-lg"></i>
+            Logout <i className="fa-solid fa-power-off fa-lg"></i>
           </a>
         </nav>
         <h2 className="user--header">

@@ -74,6 +74,12 @@ export default function GetMovie(props) {
           </div>
         </div>
         {elementz}
+        <button
+          style={{ width: "200px", height: "400px" }}
+          onClick={() => localStorage.removeItem("moviez")}
+        >
+          Remove movies
+        </button>
       </div>
     </>
   );

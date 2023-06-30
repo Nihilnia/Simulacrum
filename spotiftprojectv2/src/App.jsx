@@ -6,6 +6,9 @@ import { onSnapshot, doc, addDoc, deleteDoc, setDoc } from "firebase/firestore";
 import Login from "./Login/Login";
 import Register from "./Register/Register";
 import Dashboard from "./Dashboard/Dashboard";
+import FollowingArtists from "./FollowingArtists/FollowingArtists";
+import FollowingSongs from "./FollowingSongs/FollowingSongs";
+import FollowingPlaylists from "./FollowingPlaylists/FollowingPlaylists";
 
 export default function App() {
   const [userInput, setUserInput] = useState({
@@ -35,6 +38,7 @@ export default function App() {
   };
 
   const [loggedUser, setLoggedUser] = useState(null);
+  const [fromPage, setFromPage] = useState("Login");
 
   const handleUserEnter = (e) => {
     if (e.key == "Enter") {
@@ -113,7 +117,7 @@ export default function App() {
     }
   };
 
-  const handlePaging = (e, pageName) => {
+  const handlePaging = (e, pageName, from) => {
     setPage(pageName);
     setModal(() => {
       return {
@@ -122,6 +126,7 @@ export default function App() {
         information: "",
       };
     });
+    setFromPage(from);
   };
 
   const [dbUserz, setDBUserz] = useState(null);
@@ -150,6 +155,9 @@ export default function App() {
     //? When onSnapshot is done with it' s shit its make it over to watch
     //? for encounter the memory leak
   }, []);
+
+  console.log("DB USERZ");
+  console.log(dbUserz);
 
   // console.log(`
   // Temp data:
@@ -182,6 +190,37 @@ export default function App() {
       )}
       {page == "Dashboard" && (
         <Dashboard
+          handleInputChange={handleInputChange}
+          handleUserEnter={handleUserEnter}
+          handlePaging={handlePaging}
+          modal={modal}
+          setModal={setModal}
+          loggedUser={loggedUser}
+          fromPage={fromPage}
+        />
+      )}
+      {page == "Followin' Artists" && (
+        <FollowingArtists
+          handleInputChange={handleInputChange}
+          handleUserEnter={handleUserEnter}
+          handlePaging={handlePaging}
+          modal={modal}
+          setModal={setModal}
+          loggedUser={loggedUser}
+        />
+      )}
+      {page == "Followin' Songs" && (
+        <FollowingSongs
+          handleInputChange={handleInputChange}
+          handleUserEnter={handleUserEnter}
+          handlePaging={handlePaging}
+          modal={modal}
+          setModal={setModal}
+          loggedUser={loggedUser}
+        />
+      )}
+      {page == "Followin' Playlists" && (
+        <FollowingPlaylists
           handleInputChange={handleInputChange}
           handleUserEnter={handleUserEnter}
           handlePaging={handlePaging}

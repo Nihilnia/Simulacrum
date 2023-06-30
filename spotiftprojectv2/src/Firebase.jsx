@@ -19,3 +19,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const userzCollection = collection(db, "userz");
+export const followingArtistzCollection = collection(db, "followingArtistz");
+export const followingSongzCollection = collection(db, "followingSongz");
+export const followingPlaylistzCollection = collection(
+  db,
+  "followingPlaylistz"
+);

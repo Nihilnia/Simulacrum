@@ -15,6 +15,7 @@ import "../ArtistCard/ArtistCard2.css";
 import defArtistPic from "../ArtistCard/defArtist.png";
 import defTrackPic from "../ArtistCard/defTrack.png";
 import defPlaylistPic from "../ArtistCard/defPlaylist.png";
+import ProfileV2 from "../Profile/ProfileV2";
 
 const clientID = "4417abaf1e184e449cf0d5a9feab5e49";
 const clientSecret = "e319dae8583c44dc85b3cc12989ae5fa";
@@ -26,7 +27,8 @@ export default function Dashboard(props) {
 
   console.log(document.querySelector("#root"));
 
-  const { loggedUser, fromPage, handlePaging } = props;
+  const { loggedUser, fromPage, handlePaging, profileIntel, setProfileIntel } =
+    props;
 
   const [accessToken, setAccessToken] = useState("");
   const [artists, setArtists] = useState([]);
@@ -37,6 +39,9 @@ export default function Dashboard(props) {
   const [userSongz, setUserSongz] = useState([]);
   const [userArtistz, setUserArtistz] = useState([]);
   const [userPlaylistz, setUserPlaylistz] = useState([]);
+
+  //Profile popUp
+  const [isProfile, setIsProfile] = useState(false);
 
   const [userChoice, setUserChoice] = useState({
     userName: loggedUser.userName,
@@ -162,7 +167,16 @@ export default function Dashboard(props) {
       );
     //? When onSnapshot is done with it' s shit its make it over to watch
     //? for encounter the memory leak
+
+    setProfileIntel({
+      userName: loggedUser.userName,
+      intelSongz: userSongz,
+      intelArtistz: userArtistz,
+      intelPlaylistz: userPlaylistz,
+    });
   };
+
+  console.log(document.querySelector("#root"));
 
   const handleFollowArtist = (e, incomingIntel) => {
     console.log(`User requested to follow the artist:`);
@@ -172,6 +186,33 @@ export default function Dashboard(props) {
     };
 
     followTheArtist();
+  };
+
+  const handleUnfollowArtist = async (e, id) => {
+    console.log("Incomin'");
+    console.log(id);
+    console.log("collection");
+    console.log(followingArtistzCollection);
+    const docRef = doc(db, "followingArtistz", id);
+    await deleteDoc(docRef);
+  };
+
+  const handleUnfollowSong = async (e, id) => {
+    console.log(
+      `User: ${loggedUser.userName} requested to follow the song with ID`
+    );
+    console.log(id);
+    const docRef = doc(db, "followingSongz", id);
+    await deleteDoc(docRef);
+  };
+
+  const handleUnfollowPlaylist = async (e, id) => {
+    console.log(
+      `User: ${loggedUser.userName} requested to follow the playlist with ID`
+    );
+    console.log(id);
+    const docRef = doc(db, "followingPlaylistz", id);
+    await deleteDoc(docRef);
   };
 
   const handleFollowSong = (e, incomingIntel) => {
@@ -220,6 +261,8 @@ export default function Dashboard(props) {
   let toRenderTracks = tracks.map((track) => {
     let isFollowing = userSongz.filter((f) => f.songID == track.id);
 
+    const findIntel = userSongz.filter((f) => f.songID == track.id);
+
     // album.images[0].url
     // name
     // duration_ms
@@ -229,7 +272,9 @@ export default function Dashboard(props) {
       <>
         <article
           style={{ height: "241.8px !important" }}
-          className="card card--1"
+          className={`card card--1 sTrack ${
+            isFollowing.length > 0 ? "makeItBlack" : ""
+          }`}
           // onClick={() => {
           //   window.open(track.external_urls["spotify"], "_blank");
           // }}
@@ -267,8 +312,8 @@ export default function Dashboard(props) {
           <div className="card__info">
             <span className="card__category">
               {" "}
-              {track.name.length > 25
-                ? track.name.slice(0, 25) + "..."
+              {track.name.length > 21
+                ? track.name.slice(0, 18) + "..."
                 : track.name}
             </span>
             <h3 className="card__title"></h3>
@@ -331,6 +376,9 @@ export default function Dashboard(props) {
                 <>
                   <br />
                   <svg
+                    onClick={(e) => {
+                      handleUnfollowSong(e, findIntel[0].id);
+                    }}
                     style={{
                       marginTop: "2px",
                       color: "#C88413",
@@ -344,7 +392,7 @@ export default function Dashboard(props) {
                   >
                     <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
                   </svg>
-                  Following
+                  <span style={{ marginLeft: "2px" }}>Following</span>
                 </>
               ) : (
                 //Not following
@@ -377,7 +425,7 @@ export default function Dashboard(props) {
                   >
                     <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
                   </svg>
-                  Follow
+                  <span style={{ marginLeft: "2px" }}>Follow</span>
                 </>
               )}
             </span>
@@ -406,10 +454,23 @@ export default function Dashboard(props) {
   let toRenderArtists = artists.map((artist) => {
     let isFollowing = userArtistz.filter((f) => f.artistID == artist.id);
 
+    //Get the id of the collection
+    let findIntel = userArtistz.filter((f) => f.artistID == artist.id);
+
+    let adjustGenrez = "";
+    if (artist.genres.length > 0) {
+      for (let f = 0; f < artist.genres.length; f++) {
+        adjustGenrez += artist.genres[f] + " ";
+      }
+    } else {
+      adjustGenrez = "Unknown";
+    }
+
     return (
       <>
         <article
-          className="card card--1"
+          className="card card--1 sArtist"
+          style={{ width: "244.8px !important", height: "383px !important" }}
           // onClick={() => {
           //   window.open(artist.external_urls["spotify"], "_blank");
           // }}
@@ -447,12 +508,21 @@ export default function Dashboard(props) {
             ></div>
           </a>
           <div className="card__info">
-            <span className="card__category"> {artist.name}</span>
-            <h3 className="card__title">{artist.artistName}</h3>
+            <span className="card__category">
+              {" "}
+              {artist.name.length > 21
+                ? artist.name.slice(0, 18) + "..."
+                : artist.name}
+            </span>
+            <h3 className="card__title"></h3>
             <span className="card__by">
               Genres:{" "}
               <a className="card__author" title="author">
-                {artist.genres.length > 0 ? artist.genres : "Unknown"}
+                {artist.genres.length > 0
+                  ? adjustGenrez.length > 20
+                    ? adjustGenrez.slice(0, 17) + "..."
+                    : adjustGenrez
+                  : "Unknown"}
               </a>
             </span>
             <br />
@@ -467,19 +537,12 @@ export default function Dashboard(props) {
                 <>
                   <br />
                   <svg
-                    onClick={(e) =>
-                      handleFollowArtist(e, {
-                        userID: loggedUser.id,
-                        userName: loggedUser.userName,
-                        artistID: artist.id,
-                        artistName: artist.name,
-                        artistPic: artist.images[0].url,
-                        artistPopularity: artist.popularity,
-                        artistSpotifyLink: artist.external_urls["spotify"],
-                        artistGenrez: artist.genres,
-                        artistFollowerCount: artist.followers["total"],
-                      })
-                    }
+                    onClick={(e) => {
+                      console.log("User requested to unfollow the artist:");
+                      console.log(findIntel);
+                      console.log(artist);
+                      handleUnfollowArtist(e, findIntel[0].id);
+                    }}
                     style={{
                       marginTop: "2px",
                       color: "#C88413",
@@ -488,12 +551,12 @@ export default function Dashboard(props) {
                     width="16"
                     height="16"
                     fill="currentColor"
-                    class="bi bi-star-fill"
+                    className="bi bi-star-fill"
                     viewBox="0 0 16 16"
                   >
                     <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
                   </svg>
-                  Following
+                  <span style={{ marginLeft: "2px" }}>Following</span>
                 </>
               ) : (
                 //Not following
@@ -526,7 +589,7 @@ export default function Dashboard(props) {
                   >
                     <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
                   </svg>
-                  Follow
+                  <span style={{ marginLeft: "2px" }}>Follow</span>
                 </>
               )}
             </span>
@@ -539,6 +602,8 @@ export default function Dashboard(props) {
   //? Render Playlists
   let toRenderPlaylists = playlists.map((playlist) => {
     let isFollowing = userPlaylistz.filter((f) => f.playlistID == playlist.id);
+
+    let findIntel = userPlaylistz.filter((f) => f.playlistID == playlist.id);
 
     // description
     // images
@@ -593,21 +658,51 @@ export default function Dashboard(props) {
                 ? playlist.name.slice(0, 25) + "..."
                 : playlist.name}
             </span>
+            <br />
+            <br />
+            <span className=" " style={{ color: "#808080" }}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-blockquote-left"
+                viewBox="0 0 16 16"
+              >
+                <path d="M2.5 3a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1h-11zm5 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1h-6zm0 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1h-6zm-5 3a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1h-11zm.79-5.373c.112-.078.26-.17.444-.275L3.524 6c-.122.074-.272.17-.452.287-.18.117-.35.26-.51.428a2.425 2.425 0 0 0-.398.562c-.11.207-.164.438-.164.692 0 .36.072.65.217.873.144.219.385.328.72.328.215 0 .383-.07.504-.211a.697.697 0 0 0 .188-.463c0-.23-.07-.404-.211-.521-.137-.121-.326-.182-.568-.182h-.282c.024-.203.065-.37.123-.498a1.38 1.38 0 0 1 .252-.37 1.94 1.94 0 0 1 .346-.298zm2.167 0c.113-.078.262-.17.445-.275L5.692 6c-.122.074-.272.17-.452.287-.18.117-.35.26-.51.428a2.425 2.425 0 0 0-.398.562c-.11.207-.164.438-.164.692 0 .36.072.65.217.873.144.219.385.328.72.328.215 0 .383-.07.504-.211a.697.697 0 0 0 .188-.463c0-.23-.07-.404-.211-.521-.137-.121-.326-.182-.568-.182h-.282a1.75 1.75 0 0 1 .118-.492c.058-.13.144-.254.257-.375a1.94 1.94 0 0 1 .346-.3z" />
+              </svg>
+              &nbsp;
+              {/* Description: too long */}
+              Description:&nbsp;
+              {playlist.description.length > 0
+                ? playlist.description.length > 45
+                  ? playlist.description.slice(0, 35) + ".."
+                  : playlist.description
+                : "Not provided."}
+            </span>
+            <br />
             <h3 className="card__title">
               Tracks:
-              {playlist.tracks.total > 0 ? playlist.tracks.total : 0}
+              <span style={{ color: "#AD7D52", marginLeft: "3px" }}>
+                {playlist.tracks.total > 0 ? playlist.tracks.total : 0}
+              </span>
             </h3>
             <span className="card__by">
               Owner:{" "}
               <a href="#" className="card__author" title="author">
                 {playlist.owner.display_name}
               </a>
+            </span>
+            <span className="card__by">
               {/* CHECKIN' IF THE USER ALREADY FOLLOWIN' */}
               {isFollowing.length > 0 ? (
                 //Already following
                 <>
                   <br />
                   <svg
+                    onClick={(e) => {
+                      handleUnfollowPlaylist(e, findIntel[0].id);
+                    }}
                     style={{
                       marginTop: "2px",
                       color: "#C88413",
@@ -621,7 +716,7 @@ export default function Dashboard(props) {
                   >
                     <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
                   </svg>
-                  Following
+                  <span style={{ marginLeft: "2px" }}>Following</span>
                 </>
               ) : (
                 //Not following
@@ -632,12 +727,13 @@ export default function Dashboard(props) {
                       handleFollowPlaylist(e, {
                         userID: loggedUser.id,
                         userName: loggedUser.userName,
+                        playlistID: playlist.id,
+                        playlistName: playlist.name,
                         playlistDescription: playlist.description,
                         playlistOwner: playlist.owner["display_name"],
                         playlistPic: playlist.images[0].url,
                         playlistTrackCount: playlist.tracks.total,
                         playlistUrl: playlist.external_urls["spotify"],
-                        playlistID: playlist.id,
                       })
                     }
                     style={{
@@ -653,10 +749,13 @@ export default function Dashboard(props) {
                   >
                     <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
                   </svg>
-                  Follow
+                  <span style={{ marginLeft: "2px" }}>Follow</span>
                 </>
               )}
             </span>
+
+            <br />
+
             {/* playlistDescription
               "defDescription"
 
@@ -688,6 +787,7 @@ export default function Dashboard(props) {
     return (
       <article
         key={playlist.id}
+        style={{ width: "466px !important", height: "440px !important" }}
         className="card card--1 sPlaylist"
         // onClick={() => {
         //   window.open(artist.external_urls["spotify"], "_blank");
@@ -738,8 +838,14 @@ export default function Dashboard(props) {
               .querySelector(".loading--after")
               .classList.add("visibilityHidden", "visibilityVisible");
           }, 0)}
+      {/* PROFILE SEGMENT HERE */}
+      {isProfile && (
+        <ProfileV2 profileIntel={profileIntel} toggleProfile={setIsProfile} />
+      )}
 
       <div className="loading--after visibilityHidden">
+        {/* Profile popUp */}
+
         <div className="navbar--back"></div>
         <nav className="childNav" id="navBar">
           <a onClick={(e) => handlePaging(e, "Dashboard")}>
@@ -812,7 +918,11 @@ export default function Dashboard(props) {
             </svg>
           </a>
           &nbsp;|&nbsp;
-          <a>
+          <a
+            onClick={(e) => {
+              setIsProfile((prev) => !prev);
+            }}
+          >
             Profile&nbsp;
             <svg
               xmlns="http://www.w3.org/2000/svg"

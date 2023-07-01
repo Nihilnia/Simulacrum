@@ -9,6 +9,7 @@ import Dashboard from "./Dashboard/Dashboard";
 import FollowingArtists from "./FollowingArtists/FollowingArtists";
 import FollowingSongs from "./FollowingSongs/FollowingSongs";
 import FollowingPlaylists from "./FollowingPlaylists/FollowingPlaylists";
+import Profile from "./Profile/Profile";
 
 export default function App() {
   const [userInput, setUserInput] = useState({
@@ -22,6 +23,8 @@ export default function App() {
     userName: "",
     information: "defaultInformation",
   });
+
+  const [profileIntel, setProfileIntel] = useState();
 
   const handleInputChange = (e) => {
     // console.log("Change happening..");
@@ -197,6 +200,8 @@ export default function App() {
           setModal={setModal}
           loggedUser={loggedUser}
           fromPage={fromPage}
+          profileIntel={profileIntel}
+          setProfileIntel={setProfileIntel}
         />
       )}
       {page == "Followin' Artists" && (
@@ -207,6 +212,7 @@ export default function App() {
           modal={modal}
           setModal={setModal}
           loggedUser={loggedUser}
+          profileIntel={profileIntel}
         />
       )}
       {page == "Followin' Songs" && (
@@ -217,10 +223,22 @@ export default function App() {
           modal={modal}
           setModal={setModal}
           loggedUser={loggedUser}
+          profileIntel={profileIntel}
         />
       )}
       {page == "Followin' Playlists" && (
         <FollowingPlaylists
+          handleInputChange={handleInputChange}
+          handleUserEnter={handleUserEnter}
+          handlePaging={handlePaging}
+          modal={modal}
+          setModal={setModal}
+          loggedUser={loggedUser}
+          profileIntel={profileIntel}
+        />
+      )}
+      {page == "Profile" && (
+        <Profile
           handleInputChange={handleInputChange}
           handleUserEnter={handleUserEnter}
           handlePaging={handlePaging}

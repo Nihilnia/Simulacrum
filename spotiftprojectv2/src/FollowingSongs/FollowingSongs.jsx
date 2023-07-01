@@ -4,6 +4,7 @@ import { onSnapshot, doc, addDoc, deleteDoc, setDoc } from "firebase/firestore";
 
 // import "./FollowingArtists.css";
 import "../ArtistCard/ArtistCard2.css";
+import ProfileV2 from "../Profile/ProfileV2";
 
 import defArtistPic from "../ArtistCard/defArtist.png";
 
@@ -16,10 +17,13 @@ export default function FollowingSongs(props) {
     .querySelector(".loading--after")
     .classList.add("visibilityHidden", "visibilityVisible");
 
-  const { loggedUser, handlePaging } = props;
+  const { loggedUser, handlePaging, profileIntel } = props;
   console.log(loggedUser);
 
   const [allFollowingSongz, setAllFollowingSongz] = useState(null);
+
+  //Profile popUp
+  const [isProfile, setIsProfile] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(followingSongzCollection, (snapshot) => {
@@ -90,10 +94,8 @@ export default function FollowingSongs(props) {
     return (
       <>
         <article
-          className="card card--1"
-          // onClick={() => {
-          //   window.open(song.artistSpotifyLink, "_blank");
-          // }}
+          style={{ width: "244.8px" }}
+          className="card card--1 makeItBlack"
         >
           <div className="card__info-hover">
             <svg className="card__like" viewBox="0 0 24 24">
@@ -132,8 +134,8 @@ export default function FollowingSongs(props) {
           <div className="card__info">
             <span className="card__category">
               {" "}
-              {song.songName.length > 25
-                ? song.songName.slice(0, 25) + "..."
+              {song.songName.length > 21
+                ? song.songName.slice(0, 18) + "..."
                 : song.songName}
             </span>
             <span className="card__category"> {song.songArtistz["name"]}</span>
@@ -152,6 +154,28 @@ export default function FollowingSongs(props) {
               <a href="#" className="card__author" title="author">
                 {`${song.songReleaseDate}`}
               </a>
+              {/* //Already following */}
+              <>
+                <br />
+                <svg
+                  onClick={(e) => {
+                    handleUnfollowSong(e, song.id);
+                  }}
+                  style={{
+                    marginTop: "2px",
+                    color: "#C88413",
+                  }}
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                </svg>
+                <span style={{ marginLeft: "2px" }}>Following</span>
+              </>
             </span>
           </div>
         </article>
@@ -171,6 +195,9 @@ export default function FollowingSongs(props) {
   };
   return (
     <>
+      {isProfile && (
+        <ProfileV2 profileIntel={profileIntel} toggleProfile={setIsProfile} />
+      )}
       <div className="loading--after visibilityHidden">
         <div className="navbar--back"></div>
         <nav className="childNav" id="navBar">
@@ -236,7 +263,11 @@ export default function FollowingSongs(props) {
             </svg>
           </a>
           &nbsp;|&nbsp;
-          <a>
+          <a
+            onClick={(e) => {
+              setIsProfile((prev) => !prev);
+            }}
+          >
             Profile&nbsp;
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -267,7 +298,9 @@ export default function FollowingSongs(props) {
         <h2 className="user--header">
           You' re followin {followingSongz?.length} songs
         </h2>
-        <section className="cards">{toRender}</section>
+        <div className="grid-container" style={{ marginTop: "20px" }}>
+          {toRender}
+        </div>
       </div>
     </>
   );

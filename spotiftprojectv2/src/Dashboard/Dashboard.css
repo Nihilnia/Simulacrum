@@ -226,7 +226,7 @@ div p {
   width: 100vw;
   height: 100vh;
   /* background: #0c0c0d; */
-  background-image: url("./loadingBG.jpg");
+  background-image: url("./loadingBG.jpg") !important;
   background-size: cover;
 }
 /* .loading--lollypop,
@@ -573,4 +573,13 @@ nav a:nth-child(5) {
   width: 50%;
   padding: 10px;
   text-align: center;
+}
+
+.profileContainer {
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }

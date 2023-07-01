@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { db, followingPlaylistzCollection } from "../Firebase";
 import { onSnapshot, doc, addDoc, deleteDoc, setDoc } from "firebase/firestore";
-
+import ProfileV2 from "../Profile/ProfileV2";
 // import "./FollowingArtists.css";
 import "../ArtistCard/ArtistCard2.css";
 
@@ -16,10 +16,13 @@ export default function FollowingPlaylists(props) {
     .querySelector(".loading--after")
     .classList.add("visibilityHidden", "visibilityVisible");
 
-  const { loggedUser, handlePaging } = props;
+  const { loggedUser, handlePaging, profileIntel } = props;
   console.log(loggedUser);
 
   const [allFollowingPlaylistz, setAllFollowingPlaylistz] = useState(null);
+
+  //Profile popUp
+  const [isProfile, setIsProfile] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(followingPlaylistzCollection, (snapshot) => {
@@ -90,7 +93,8 @@ export default function FollowingPlaylists(props) {
     return (
       <>
         <article
-          className="card card--1"
+          style={{ width: "244.8px" }}
+          className="card card--1 makeItBlack"
           // onClick={() => {
           //   window.open(song.artistSpotifyLink, "_blank");
           // }}
@@ -107,6 +111,7 @@ export default function FollowingPlaylists(props) {
                 <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
               </svg>
               <span className="card__time">
+                Total Tracks:
                 {playlist.playlistTrackCount > 0
                   ? playlist.playlistTrackCount
                   : 0}
@@ -134,23 +139,70 @@ export default function FollowingPlaylists(props) {
           <div className="card__info">
             <span className="card__category">
               {" "}
-              {playlist.playlistDecription}
+              {playlist.playlistName.length > 22
+                ? playlist.playlistName.slice(0, 19) + "..."
+                : playlist.playlistName}
             </span>
-            <h3 className="card__title">{playlist.playlistName}</h3>
-            <span className="card__by">
+            <br />
+            <br />
+            <span className=" " style={{ color: "#808080" }}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-blockquote-left"
+                viewBox="0 0 16 16"
+              >
+                <path d="M2.5 3a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1h-11zm5 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1h-6zm0 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1h-6zm-5 3a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1h-11zm.79-5.373c.112-.078.26-.17.444-.275L3.524 6c-.122.074-.272.17-.452.287-.18.117-.35.26-.51.428a2.425 2.425 0 0 0-.398.562c-.11.207-.164.438-.164.692 0 .36.072.65.217.873.144.219.385.328.72.328.215 0 .383-.07.504-.211a.697.697 0 0 0 .188-.463c0-.23-.07-.404-.211-.521-.137-.121-.326-.182-.568-.182h-.282c.024-.203.065-.37.123-.498a1.38 1.38 0 0 1 .252-.37 1.94 1.94 0 0 1 .346-.298zm2.167 0c.113-.078.262-.17.445-.275L5.692 6c-.122.074-.272.17-.452.287-.18.117-.35.26-.51.428a2.425 2.425 0 0 0-.398.562c-.11.207-.164.438-.164.692 0 .36.072.65.217.873.144.219.385.328.72.328.215 0 .383-.07.504-.211a.697.697 0 0 0 .188-.463c0-.23-.07-.404-.211-.521-.137-.121-.326-.182-.568-.182h-.282a1.75 1.75 0 0 1 .118-.492c.058-.13.144-.254.257-.375a1.94 1.94 0 0 1 .346-.3z" />
+              </svg>
+              &nbsp;
+              {/* Description: too long */}
+              Description:&nbsp;
+              <br />
+              {playlist.playlistDescription.length > 0
+                ? playlist.playlistDescription.length > 20
+                  ? playlist.playlistDescription.slice(0, 19) + ".."
+                  : playlist.playlistDescription
+                : "Not provided."}
+            </span>
+            <br />
+            <h3 className="card__title">
               Tracks:{" "}
+              {playlist.playlistTrackCount > 0
+                ? playlist.playlistTrackCount
+                : 0}
+            </h3>
+            <span className="card__by">
+              Owner:{" "}
               <a href="#" className="card__author" title="author">
-                {playlist.playlistTrackCount > 0
-                  ? playlist.playlistTrackCount
-                  : 0}
+                {playlist.playlistOwner}
               </a>
             </span>
             <br />
             <span className="card__by">
-              Owner:{" "}
-              <a href="#" className="card__author" title="author">
-                {`${playlist.playlistOwner}`}
-              </a>
+              {/* //Already following */}
+              <>
+                <br />
+                <svg
+                  onClick={(e) => {
+                    handleUnfollowPlaylist(e, playlist.id);
+                  }}
+                  style={{
+                    marginTop: "2px",
+                    color: "#C88413",
+                  }}
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                </svg>
+                <span style={{ marginLeft: "2px" }}>Following</span>
+              </>
             </span>
           </div>
         </article>
@@ -170,6 +222,9 @@ export default function FollowingPlaylists(props) {
   };
   return (
     <>
+      {isProfile && (
+        <ProfileV2 profileIntel={profileIntel} toggleProfile={setIsProfile} />
+      )}
       <div className="loading--after visibilityHidden">
         <div className="navbar--back"></div>
         <nav className="childNav" id="navBar">
@@ -235,7 +290,11 @@ export default function FollowingPlaylists(props) {
             </svg>
           </a>
           &nbsp;|&nbsp;
-          <a>
+          <a
+            onClick={(e) => {
+              setIsProfile((prev) => !prev);
+            }}
+          >
             Profile&nbsp;
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -266,7 +325,9 @@ export default function FollowingPlaylists(props) {
         <h2 className="user--header">
           You' re followin {followingPlaylistz?.length} playlists
         </h2>
-        <section className="cards">{toRender}</section>
+        <div className="grid-container" style={{ marginTop: "20px" }}>
+          {toRender}
+        </div>
       </div>
     </>
   );

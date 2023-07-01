@@ -10,6 +10,7 @@
   max-width: 1400px;
   margin: auto;
   padding: 10px;
+  max-height: 424.667px;
 }
 
 .card--1 .card__img,
@@ -94,6 +95,8 @@
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
   padding: 16px 24px 24px 24px;
+  font-family: "Montserrat Alternates", sans-serif;
+  font-size: 12px;
 }
 
 .card__category {
@@ -688,4 +691,27 @@ section {
 .sPlaylist {
   width: "444";
   height: "420";
+}
+
+.sArtist {
+  width: 244.8px !important;
+  height: 383px !important;
+}
+
+.makeItBlack {
+  color: "black" !important;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 300px 300px 300px 300px;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    ". . . ."
+    ". . . ."
+    ". . . .";
+  margin: auto;
+  width: 60%;
 }

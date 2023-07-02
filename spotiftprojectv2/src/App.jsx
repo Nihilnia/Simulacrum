@@ -48,16 +48,16 @@ export default function App() {
       e.preventDefault();
 
       console.log("User pressed the enter..");
-      console.log(e.target);
+      // console.log(e.target);
 
       console.log(`
-      Given user input:
+      —Given user input—
       Username: ${userInput.userName}
       Password: ${userInput.passWord}
       `);
 
       let findUser = dbUserz.filter((f) => f.userName == userInput.userName);
-      console.log(dbUserz);
+      // console.log(dbUserz);
       switch (page) {
         case "Register":
           if (findUser.length < 1) {
@@ -90,13 +90,13 @@ export default function App() {
           //? Login control
           if (findUser.length > 0) {
             if (findUser[0].passWord == userInput.passWord) {
-              console.log("welcome mf.");
+              // console.log("welcome mf.");
               setLoggedUser(() => {
                 return findUser[0];
               });
               setPage("Dashboard");
             } else {
-              console.log("Password is wrong mf.");
+              // console.log("Password is wrong mf.");
               setModal(() => {
                 return {
                   isShow: true,
@@ -106,7 +106,7 @@ export default function App() {
               });
             }
           } else {
-            console.log("There is no user like that. Wrong mf.");
+            // console.log("There is no user like that. Wrong mf.");
             setModal(() => {
               return {
                 isShow: true,
@@ -138,7 +138,7 @@ export default function App() {
     const unsubscribe = onSnapshot(userzCollection, (snapshot) => {
       snapshot.docs.length == 0
         ? console.log("%cDatabase is empty now..", "color: orange")
-        : console.log("%cDatabase is changing..", "color: orange");
+        : console.log("%cDatabase is ready..", "color: orange");
 
       console.log(
         `At total there are ${snapshot.docs.length} userz in the database..`
@@ -159,8 +159,8 @@ export default function App() {
     //? for encounter the memory leak
   }, []);
 
-  console.log("DB USERZ");
-  console.log(dbUserz);
+  // console.log("DB USERZ");
+  // console.log(dbUserz);
 
   // console.log(`
   // Temp data:
@@ -196,8 +196,6 @@ export default function App() {
           handleInputChange={handleInputChange}
           handleUserEnter={handleUserEnter}
           handlePaging={handlePaging}
-          modal={modal}
-          setModal={setModal}
           loggedUser={loggedUser}
           fromPage={fromPage}
           profileIntel={profileIntel}
@@ -209,8 +207,6 @@ export default function App() {
           handleInputChange={handleInputChange}
           handleUserEnter={handleUserEnter}
           handlePaging={handlePaging}
-          modal={modal}
-          setModal={setModal}
           loggedUser={loggedUser}
           profileIntel={profileIntel}
         />
@@ -220,8 +216,6 @@ export default function App() {
           handleInputChange={handleInputChange}
           handleUserEnter={handleUserEnter}
           handlePaging={handlePaging}
-          modal={modal}
-          setModal={setModal}
           loggedUser={loggedUser}
           profileIntel={profileIntel}
         />
@@ -231,21 +225,12 @@ export default function App() {
           handleInputChange={handleInputChange}
           handleUserEnter={handleUserEnter}
           handlePaging={handlePaging}
-          modal={modal}
-          setModal={setModal}
           loggedUser={loggedUser}
           profileIntel={profileIntel}
         />
       )}
       {page == "Profile" && (
-        <Profile
-          handleInputChange={handleInputChange}
-          handleUserEnter={handleUserEnter}
-          handlePaging={handlePaging}
-          modal={modal}
-          setModal={setModal}
-          loggedUser={loggedUser}
-        />
+        <Profile handlePaging={handlePaging} loggedUser={loggedUser} />
       )}
     </>
   );

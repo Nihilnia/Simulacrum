@@ -9,7 +9,7 @@ import ProfileV2 from "../Profile/ProfileV2";
 import defArtistPic from "../ArtistCard/defArtist.png";
 
 export default function FollowingSongs(props) {
-  console.log("asd");
+  // console.log("asd");
   document.body.classList.remove("body--login");
   document.body.classList.add("gradient-background");
   document.body.classList.add("body--newTodo");
@@ -18,7 +18,7 @@ export default function FollowingSongs(props) {
     .classList.add("visibilityHidden", "visibilityVisible");
 
   const { loggedUser, handlePaging, profileIntel } = props;
-  console.log(loggedUser);
+  // console.log(loggedUser);
 
   const [allFollowingSongz, setAllFollowingSongz] = useState(null);
 
@@ -29,15 +29,15 @@ export default function FollowingSongs(props) {
     const unsubscribe = onSnapshot(followingSongzCollection, (snapshot) => {
       snapshot.docs.length == 0
         ? console.log("%cDatabase is empty now..", "color: orange")
-        : console.log("%cDatabase is changing..", "color: orange");
+        : console.log("%cDatabase is ready..", "color: orange");
 
       //! READING:
       const userzFollowingSongz = snapshot.docs.map((doc) => {
         return { id: doc.id, ...doc.data() };
       });
 
-      console.log("SONGSZZZZZ");
-      console.log(userzFollowingSongz);
+      // console.log("SONGSZZZZZ");
+      // console.log(userzFollowingSongz);
 
       setAllFollowingSongz(userzFollowingSongz);
     });
@@ -52,134 +52,131 @@ export default function FollowingSongs(props) {
     await deleteDoc(docRef); //? Give the reference to delete
   };
 
-  console.log("AAAAAAAAAAAAAAAAAA");
-  console.log(allFollowingSongz);
+  // console.log("AAAAAAAAAAAAAAAAAA");
+  // console.log(allFollowingSongz);
 
   let followingSongz = allFollowingSongz?.filter(
     (f) => f.userID == loggedUser.id
   );
 
-  console.log(followingSongz);
+  // console.log(followingSongz);
 
   {
     /* songAlbumName
-                "defAlbum"
+    "defAlbum"
 
-                songArtistz
-                "defArtistz"
+    songArtistz
+    "defArtistz"
 
-                songID
-                "333"
+    songID
+    "333"
 
-                songName
-                "defSong"
+    songName
+    "defSong"
 
-                songPic
-                "defPic"
+    songPic
+    "defPic"
 
-                songPopularity
-                "444"
+    songPopularity
+    "444"
 
-                songReleaseDate
-                "defDate"
+    songReleaseDate
+    "defDate"
 
-                userID
-                "666"
+    userID
+    "666"
 
-                userName
-                "defUser" */
+    userName
+    "defUser" */
   }
 
   let toRender = followingSongz?.map((song) => {
     return (
-      <>
-        <article
-          style={{ width: "244.8px" }}
-          className="card card--1 makeItBlack"
-        >
-          <div className="card__info-hover">
-            <svg className="card__like" viewBox="0 0 24 24">
-              <path
-                fill="#000000"
-                d="M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"
-              />
+      <article
+        key={song.id}
+        style={{ width: "244.8px" }}
+        className="card card--1 makeItBlack"
+      >
+        <div className="card__info-hover">
+          <svg className="card__like" viewBox="0 0 24 24">
+            <path
+              fill="#000000"
+              d="M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"
+            />
+          </svg>
+          <div className="card__clock-info">
+            <svg className="card__clock" viewBox="0 0 24 24">
+              <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
             </svg>
-            <div className="card__clock-info">
-              <svg className="card__clock" viewBox="0 0 24 24">
-                <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
-              </svg>
-              <span className="card__time">
-                {song.songPopularity > 0 ? song.songPopularity : 0}
-              </span>
-            </div>
+            <span className="card__time">
+              {song.songPopularity > 0 ? song.songPopularity : 0}
+            </span>
           </div>
+        </div>
+        <div
+          className="card__img"
+          style={{
+            backgroundImage: `url(${
+              song.songPic != undefined ? song.songPic : ""
+            })`,
+          }}
+        ></div>
+        <a href="#" className="card_link">
           <div
-            className="card__img"
+            className="card__img--hover"
             style={{
               backgroundImage: `url(${
                 song.songPic != undefined ? song.songPic : ""
               })`,
             }}
           ></div>
-          <a href="#" className="card_link">
-            <div
-              className="card__img--hover"
-              style={{
-                backgroundImage: `url(${
-                  song.songPic != undefined ? song.songPic : ""
-                })`,
-              }}
-            ></div>
-          </a>
-          <div className="card__info">
-            <span className="card__category">
-              {" "}
-              {song.songName.length > 21
-                ? song.songName.slice(0, 18) + "..."
-                : song.songName}
-            </span>
-            <span className="card__category"> {song.songArtistz["name"]}</span>
-            <h3 className="card__title">{song.songArtistz["name"]}</h3>
-            <span className="card__by">
-              Album:{" "}
-              <a href="#" className="card__author" title="author">
-                {song.songAlbumName != undefined
-                  ? song.songAlbumName
-                  : "Unknown"}
-              </a>
-            </span>
-            <br />
-            <span className="card__by">
-              Release Date:{" "}
-              <a href="#" className="card__author" title="author">
-                {`${song.songReleaseDate}`}
-              </a>
-              {/* //Already following */}
-              <>
-                <br />
-                <svg
-                  onClick={(e) => {
-                    handleUnfollowSong(e, song.id);
-                  }}
-                  style={{
-                    marginTop: "2px",
-                    color: "#C88413",
-                  }}
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-star-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                </svg>
-                <span style={{ marginLeft: "2px" }}>Following</span>
-              </>
-            </span>
-          </div>
-        </article>
-      </>
+        </a>
+        <div className="card__info">
+          <span className="card__category">
+            {" "}
+            {song.songName.length > 21
+              ? song.songName.slice(0, 18) + "..."
+              : song.songName}
+          </span>
+          <span className="card__category"> {song.songArtistz["name"]}</span>
+          <h3 className="card__title">{song.songArtistz["name"]}</h3>
+          <span className="card__by">
+            Album:{" "}
+            <a href="#" className="card__author" title="author">
+              {song.songAlbumName != undefined ? song.songAlbumName : "Unknown"}
+            </a>
+          </span>
+          <br />
+          <span className="card__by">
+            Release Date:{" "}
+            <a href="#" className="card__author" title="author">
+              {`${song.songReleaseDate}`}
+            </a>
+            {/* //Already following */}
+            <>
+              <br />
+              <svg
+                onClick={(e) => {
+                  handleUnfollowSong(e, song.id);
+                }}
+                style={{
+                  marginTop: "2px",
+                  color: "#C88413",
+                }}
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-star-fill"
+                viewBox="0 0 16 16"
+              >
+                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+              </svg>
+              <span style={{ marginLeft: "2px" }}>Following</span>
+            </>
+          </span>
+        </div>
+      </article>
     );
   });
 

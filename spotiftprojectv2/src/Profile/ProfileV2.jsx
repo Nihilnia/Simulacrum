@@ -1,3 +1,5 @@
+import defPP from "../Profile/defPP.jpg";
+
 export default function ProfileV2(props) {
   const { profileIntel, toggleProfile } = props;
 
@@ -14,7 +16,7 @@ export default function ProfileV2(props) {
         }}
         className="profileContainer"
         style={{
-          backgroundColor: "rgba(0,0,1,0.7)",
+          backgroundColor: "rgba(255, 255, 255, 0.01)",
           width: "1890px",
           height: "1060px",
           position: "absolute",
@@ -44,10 +46,10 @@ export default function ProfileV2(props) {
                 <div className="circle-1"></div>
                 <div className="circle-2"></div>
                 <img
-                  src="https://100dayscss.com/codepen/jessica-potter.jpg"
+                  src={defPP}
                   width="70"
                   height="70"
-                  alt="Jessica Potter"
+                  alt={profileIntel.userName}
                 />
               </div>
               <div className="name">{profileIntel.userName}</div>

@@ -1,5 +1,6 @@
 import "./ProfileV2.css";
-import defWoman from "./Girl-Workplace.svg";
+
+import defPP from "../Profile/defPP.jpg";
 
 export default function Profile(props) {
   const { loggedUser, handlePaging } = props;
@@ -99,17 +100,17 @@ export default function Profile(props) {
           </a>
         </nav>
         {/* After here */}
-        <div className="frame">
+        <div className="frame" style={{ marginTop: "-20px" }}>
           <div className="center">
             <div className="profile">
               <div className="image">
                 <div className="circle-1"></div>
                 <div className="circle-2"></div>
                 <img
-                  src="https://100dayscss.com/codepen/jessica-potter.jpg"
+                  src={defPP}
                   width="70"
                   height="70"
-                  alt="Jessica Potter"
+                  alt={loggedUser.userName}
                 />
               </div>
 

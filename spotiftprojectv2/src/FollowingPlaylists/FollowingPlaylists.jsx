@@ -8,7 +8,7 @@ import "../ArtistCard/ArtistCard2.css";
 import defArtistPic from "../ArtistCard/defArtist.png";
 
 export default function FollowingPlaylists(props) {
-  console.log("asd");
+  // console.log("asd");
   document.body.classList.remove("body--login");
   document.body.classList.add("gradient-background");
   document.body.classList.add("body--newTodo");
@@ -17,7 +17,7 @@ export default function FollowingPlaylists(props) {
     .classList.add("visibilityHidden", "visibilityVisible");
 
   const { loggedUser, handlePaging, profileIntel } = props;
-  console.log(loggedUser);
+  // console.log(loggedUser);
 
   const [allFollowingPlaylistz, setAllFollowingPlaylistz] = useState(null);
 
@@ -28,15 +28,15 @@ export default function FollowingPlaylists(props) {
     const unsubscribe = onSnapshot(followingPlaylistzCollection, (snapshot) => {
       snapshot.docs.length == 0
         ? console.log("%cDatabase is empty now..", "color: orange")
-        : console.log("%cDatabase is changing..", "color: orange");
+        : console.log("%cDatabase is ready..", "color: orange");
 
       //! READING:
       const userzFollowingPlaylistz = snapshot.docs.map((doc) => {
         return { id: doc.id, ...doc.data() };
       });
 
-      console.log("SONGSZZZZZ");
-      console.log(userzFollowingPlaylistz);
+      // console.log("SONGSZZZZZ");
+      // console.log(userzFollowingPlaylistz);
 
       setAllFollowingPlaylistz(userzFollowingPlaylistz);
     });
@@ -51,14 +51,14 @@ export default function FollowingPlaylists(props) {
     await deleteDoc(docRef); //? Give the reference to delete
   };
 
-  console.log("AAAAAAAAAAAAAAAAAA");
-  console.log(allFollowingPlaylistz);
+  // console.log("AAAAAAAAAAAAAAAAAA");
+  // console.log(allFollowingPlaylistz);
 
   let followingPlaylistz = allFollowingPlaylistz?.filter(
     (f) => f.userID == loggedUser.id
   );
 
-  console.log(followingPlaylistz);
+  // console.log(followingPlaylistz);
 
   {
     /* songAlbumName
@@ -91,122 +91,119 @@ export default function FollowingPlaylists(props) {
 
   let toRender = followingPlaylistz?.map((playlist) => {
     return (
-      <>
-        <article
-          style={{ width: "244.8px" }}
-          className="card card--1 makeItBlack"
-          // onClick={() => {
-          //   window.open(song.artistSpotifyLink, "_blank");
-          // }}
-        >
-          <div className="card__info-hover">
-            <svg className="card__like" viewBox="0 0 24 24">
-              <path
-                fill="#000000"
-                d="M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"
-              />
+      <article
+        key={playlist.id}
+        style={{ width: "244.8px" }}
+        className="card card--1 makeItBlack"
+        // onClick={() => {
+        //   window.open(song.artistSpotifyLink, "_blank");
+        // }}
+      >
+        <div className="card__info-hover">
+          <svg className="card__like" viewBox="0 0 24 24">
+            <path
+              fill="#000000"
+              d="M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"
+            />
+          </svg>
+          <div className="card__clock-info">
+            <svg className="card__clock" viewBox="0 0 24 24">
+              <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
             </svg>
-            <div className="card__clock-info">
-              <svg className="card__clock" viewBox="0 0 24 24">
-                <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
-              </svg>
-              <span className="card__time">
-                Total Tracks:
-                {playlist.playlistTrackCount > 0
-                  ? playlist.playlistTrackCount
-                  : 0}
-              </span>
-            </div>
+            <span className="card__time">
+              Total Tracks:
+              {playlist.playlistTrackCount > 0
+                ? playlist.playlistTrackCount
+                : 0}
+            </span>
           </div>
+        </div>
+        <div
+          className="card__img"
+          style={{
+            backgroundImage: `url(${
+              playlist.playlistPic != undefined ? playlist.playlistPic : ""
+            })`,
+          }}
+        ></div>
+        <a href="#" className="card_link">
           <div
-            className="card__img"
+            className="card__img--hover"
             style={{
               backgroundImage: `url(${
                 playlist.playlistPic != undefined ? playlist.playlistPic : ""
               })`,
             }}
           ></div>
-          <a href="#" className="card_link">
-            <div
-              className="card__img--hover"
-              style={{
-                backgroundImage: `url(${
-                  playlist.playlistPic != undefined ? playlist.playlistPic : ""
-                })`,
-              }}
-            ></div>
-          </a>
-          <div className="card__info">
-            <span className="card__category">
-              {" "}
-              {playlist.playlistName.length > 22
-                ? playlist.playlistName.slice(0, 19) + "..."
-                : playlist.playlistName}
-            </span>
+        </a>
+        <div className="card__info">
+          <span className="card__category">
+            {" "}
+            {playlist.playlistName.length > 22
+              ? playlist.playlistName.slice(0, 19) + "..."
+              : playlist.playlistName}
+          </span>
+          <br />
+          <br />
+          <span className=" " style={{ color: "#808080" }}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-blockquote-left"
+              viewBox="0 0 16 16"
+            >
+              <path d="M2.5 3a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1h-11zm5 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1h-6zm0 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1h-6zm-5 3a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1h-11zm.79-5.373c.112-.078.26-.17.444-.275L3.524 6c-.122.074-.272.17-.452.287-.18.117-.35.26-.51.428a2.425 2.425 0 0 0-.398.562c-.11.207-.164.438-.164.692 0 .36.072.65.217.873.144.219.385.328.72.328.215 0 .383-.07.504-.211a.697.697 0 0 0 .188-.463c0-.23-.07-.404-.211-.521-.137-.121-.326-.182-.568-.182h-.282c.024-.203.065-.37.123-.498a1.38 1.38 0 0 1 .252-.37 1.94 1.94 0 0 1 .346-.298zm2.167 0c.113-.078.262-.17.445-.275L5.692 6c-.122.074-.272.17-.452.287-.18.117-.35.26-.51.428a2.425 2.425 0 0 0-.398.562c-.11.207-.164.438-.164.692 0 .36.072.65.217.873.144.219.385.328.72.328.215 0 .383-.07.504-.211a.697.697 0 0 0 .188-.463c0-.23-.07-.404-.211-.521-.137-.121-.326-.182-.568-.182h-.282a1.75 1.75 0 0 1 .118-.492c.058-.13.144-.254.257-.375a1.94 1.94 0 0 1 .346-.3z" />
+            </svg>
+            &nbsp;
+            {/* Description: too long */}
+            Description:&nbsp;
             <br />
-            <br />
-            <span className=" " style={{ color: "#808080" }}>
+            {playlist.playlistDescription.length > 0
+              ? playlist.playlistDescription.length > 20
+                ? playlist.playlistDescription.slice(0, 19) + ".."
+                : playlist.playlistDescription
+              : "Not provided."}
+          </span>
+          <br />
+          <h3 className="card__title">
+            Tracks:{" "}
+            {playlist.playlistTrackCount > 0 ? playlist.playlistTrackCount : 0}
+          </h3>
+          <span className="card__by">
+            Owner:{" "}
+            <a href="#" className="card__author" title="author">
+              {playlist.playlistOwner}
+            </a>
+          </span>
+          <br />
+          <span className="card__by">
+            {/* //Already following */}
+            <>
+              <br />
               <svg
+                onClick={(e) => {
+                  handleUnfollowPlaylist(e, playlist.id);
+                }}
+                style={{
+                  marginTop: "2px",
+                  color: "#C88413",
+                }}
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
                 fill="currentColor"
-                className="bi bi-blockquote-left"
+                className="bi bi-star-fill"
                 viewBox="0 0 16 16"
               >
-                <path d="M2.5 3a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1h-11zm5 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1h-6zm0 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1h-6zm-5 3a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1h-11zm.79-5.373c.112-.078.26-.17.444-.275L3.524 6c-.122.074-.272.17-.452.287-.18.117-.35.26-.51.428a2.425 2.425 0 0 0-.398.562c-.11.207-.164.438-.164.692 0 .36.072.65.217.873.144.219.385.328.72.328.215 0 .383-.07.504-.211a.697.697 0 0 0 .188-.463c0-.23-.07-.404-.211-.521-.137-.121-.326-.182-.568-.182h-.282c.024-.203.065-.37.123-.498a1.38 1.38 0 0 1 .252-.37 1.94 1.94 0 0 1 .346-.298zm2.167 0c.113-.078.262-.17.445-.275L5.692 6c-.122.074-.272.17-.452.287-.18.117-.35.26-.51.428a2.425 2.425 0 0 0-.398.562c-.11.207-.164.438-.164.692 0 .36.072.65.217.873.144.219.385.328.72.328.215 0 .383-.07.504-.211a.697.697 0 0 0 .188-.463c0-.23-.07-.404-.211-.521-.137-.121-.326-.182-.568-.182h-.282a1.75 1.75 0 0 1 .118-.492c.058-.13.144-.254.257-.375a1.94 1.94 0 0 1 .346-.3z" />
+                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
               </svg>
-              &nbsp;
-              {/* Description: too long */}
-              Description:&nbsp;
-              <br />
-              {playlist.playlistDescription.length > 0
-                ? playlist.playlistDescription.length > 20
-                  ? playlist.playlistDescription.slice(0, 19) + ".."
-                  : playlist.playlistDescription
-                : "Not provided."}
-            </span>
-            <br />
-            <h3 className="card__title">
-              Tracks:{" "}
-              {playlist.playlistTrackCount > 0
-                ? playlist.playlistTrackCount
-                : 0}
-            </h3>
-            <span className="card__by">
-              Owner:{" "}
-              <a href="#" className="card__author" title="author">
-                {playlist.playlistOwner}
-              </a>
-            </span>
-            <br />
-            <span className="card__by">
-              {/* //Already following */}
-              <>
-                <br />
-                <svg
-                  onClick={(e) => {
-                    handleUnfollowPlaylist(e, playlist.id);
-                  }}
-                  style={{
-                    marginTop: "2px",
-                    color: "#C88413",
-                  }}
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-star-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                </svg>
-                <span style={{ marginLeft: "2px" }}>Following</span>
-              </>
-            </span>
-          </div>
-        </article>
-      </>
+              <span style={{ marginLeft: "2px" }}>Following</span>
+            </>
+          </span>
+        </div>
+      </article>
     );
   });
 

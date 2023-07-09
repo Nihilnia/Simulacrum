@@ -583,3 +583,17 @@ nav a:nth-child(5) {
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
 }
+
+/* COVER ART */
+.coverArtContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  font-size: 10px;
+}
+/* .coverArtContainer button {
+  padding: 10px;
+  font-size: 16px;
+  background: #d34567;
+} */

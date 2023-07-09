@@ -7,12 +7,12 @@ import { getFirestore, collection } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDIxgx1ho_cQI7wBGk6y3RSEZhsWAPJqTE",
-  authDomain: "spotifyv2-da1d0.firebaseapp.com",
-  projectId: "spotifyv2-da1d0",
-  storageBucket: "spotifyv2-da1d0.appspot.com",
-  messagingSenderId: "1050444576970",
-  appId: "1:1050444576970:web:3b91c4c6ae69a22b6d1c33",
+  apiKey: "AIzaSyDlyuw_IWkhqY9aKX-fmGhZBWi6I94pcjo",
+  authDomain: "spotifyv2test0.firebaseapp.com",
+  projectId: "spotifyv2test0",
+  storageBucket: "spotifyv2test0.appspot.com",
+  messagingSenderId: "551547053729",
+  appId: "1:551547053729:web:ecb56a2d5430f173e272e0",
 };
 
 // Initialize Firebase
@@ -25,3 +25,6 @@ export const followingPlaylistzCollection = collection(
   db,
   "followingPlaylistz"
 );
+export const nihilGitHubCollection = collection(db, "nihilGitHub");
+
+//Well done.

@@ -1,7 +1,62 @@
-import defPP from "../Profile/defPP.jpg";
+import { useEffect, useState } from "react";
+import {
+  db,
+  followingArtistzCollection,
+  followingSongzCollection,
+  followingPlaylistzCollection,
+} from "../Firebase";
+import { onSnapshot, doc, addDoc, deleteDoc, setDoc } from "firebase/firestore";
+
+import defPP from "../Profile/Gloria_2.gif";
 
 export default function ProfileV2(props) {
-  const { profileIntel, toggleProfile } = props;
+  const { loggedUser, toggleProfile } = props;
+
+  //User' s collections
+  const [userSongz, setUserSongz] = useState([]);
+  const [userArtistz, setUserArtistz] = useState([]);
+  const [userPlaylistz, setUserPlaylistz] = useState([]);
+
+  useEffect(() => {
+    //! USER' Z INTELZ
+    const unsubscribe = onSnapshot(followingArtistzCollection, (snapshot) => {
+      const userzFollowingArtistz = snapshot.docs.map((doc) => {
+        //?Map returns array.. key point!
+        return { id: doc.id, ...doc.data() };
+      });
+
+      setUserArtistz(
+        userzFollowingArtistz.filter((f) => f.userID == loggedUser.id)
+      );
+    });
+
+    const unsubscribe2 = onSnapshot(followingSongzCollection, (snapshot) => {
+      const userzFollowingSongz = snapshot.docs.map((doc) => {
+        //?Map returns array.. key point!
+        return { id: doc.id, ...doc.data() };
+      });
+
+      setUserSongz(
+        userzFollowingSongz.filter((f) => f.userID == loggedUser.id)
+      );
+    });
+
+    const unsubscribe3 = onSnapshot(
+      followingPlaylistzCollection,
+      (snapshot) => {
+        const userzFollowingPlaylistz = snapshot.docs.map((doc) => {
+          //?Map returns array.. key point!
+          return { id: doc.id, ...doc.data() };
+        });
+
+        setUserPlaylistz(
+          userzFollowingPlaylistz.filter((f) => f.userID == loggedUser.id)
+        );
+      }
+    );
+
+    return unsubscribe, unsubscribe2, unsubscribe3;
+  }, []);
 
   return (
     <>
@@ -28,8 +83,8 @@ export default function ProfileV2(props) {
           className="frame"
           style={{
             position: "absolute",
-            top: "333px",
-            left: "760px",
+            top: "234px",
+            left: "690px",
             margin: "auto",
             zIndex: "1",
             borderRadius: "12px",
@@ -47,35 +102,31 @@ export default function ProfileV2(props) {
                 <div className="circle-2"></div>
                 <img
                   src={defPP}
-                  width="70"
-                  height="70"
-                  alt={profileIntel.userName}
+                  width="175"
+                  height="175"
+                  alt={loggedUser.userName}
                 />
               </div>
-              <div className="name">{profileIntel.userName}</div>
-              <div className="job">Registered User</div>
+              <div className="name">{loggedUser.userName}</div>
+              <div className="job">_プロジェクト</div>
 
               <div className="actions">
-                <button className="btn">Follow</button>
+                <button className="btn">Logout</button>
                 <button className="btn">Message</button>
               </div>
             </div>
 
             <div className="stats">
               <div className="box">
-                <span className="value">
-                  {profileIntel.intelArtistz.length}
-                </span>
+                <span className="value">{userArtistz.length}</span>
                 <span className="parameter">Following Artists</span>
               </div>
               <div className="box">
-                <span className="value">{profileIntel.intelSongz.length}</span>
+                <span className="value">{userSongz.length}</span>
                 <span className="parameter">Following Songs</span>
               </div>
               <div className="box">
-                <span className="value">
-                  {profileIntel.intelPlaylistz.length}
-                </span>
+                <span className="value">{userPlaylistz.length}</span>
                 <span className="parameter">Following Playlists</span>
               </div>
             </div>

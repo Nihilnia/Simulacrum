@@ -7,8 +7,8 @@
 }
 .body--login {
   background-color: #080710;
-  background-image: url("./loginBGSpotify_2.png");
-  background-size: cover;
+  background-image: url("./loginBGSpotify_3.png");
+  background-size: "no-repeat";
 }
 .background--login {
   width: 430px;

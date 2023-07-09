@@ -4,6 +4,7 @@ import {
   followingArtistzCollection,
   followingSongzCollection,
   followingPlaylistzCollection,
+  nihilGitHubCollection,
 } from "../Firebase";
 import { onSnapshot, doc, addDoc, deleteDoc, setDoc } from "firebase/firestore";
 import { Spotify } from "react-spotify-embed";
@@ -26,10 +27,7 @@ export default function Dashboard(props) {
   document.body.classList.add("gradient-background");
   document.body.classList.add("body--newTodo");
 
-  // console.log(document.querySelector("#root"));
-
-  const { loggedUser, fromPage, handlePaging, profileIntel, setProfileIntel } =
-    props;
+  const { loggedUser, fromPage, handlePaging } = props;
 
   const [accessToken, setAccessToken] = useState("");
   const [artists, setArtists] = useState([]);
@@ -142,6 +140,7 @@ export default function Dashboard(props) {
       .then((response) => response.json())
       .then((data) => {
         setTracks(() => {
+          console.log(data.tracks.items);
           return data.tracks.items;
         });
       });
@@ -168,13 +167,6 @@ export default function Dashboard(props) {
       );
     //? When onSnapshot is done with it' s shit its make it over to watch
     //? for encounter the memory leak
-
-    setProfileIntel({
-      userName: loggedUser.userName,
-      intelSongz: userSongz,
-      intelArtistz: userArtistz,
-      intelPlaylistz: userPlaylistz,
-    });
   };
 
   // console.log(document.querySelector("#root"));
@@ -239,6 +231,16 @@ export default function Dashboard(props) {
     followThePlaylist();
   };
 
+  const handleNihilGitHub = (e, incomingIntel) => {
+    console.log(`User requested to follow the artist:`);
+    console.log(incomingIntel);
+    const saveTheIntel = async () => {
+      const followRef = await addDoc(nihilGitHubCollection, incomingIntel); //? Getting the reference of the process.
+    };
+
+    saveTheIntel();
+  };
+
   var prevScrollpos = window.pageYOffset;
   window.onscroll = function () {
     var currentScrollPos = window.pageYOffset;
@@ -280,24 +282,51 @@ export default function Dashboard(props) {
         //   window.open(track.external_urls["spotify"], "_blank");
         // }}
       >
-        <div className="card__info-hover">
-          <svg className="card__like" viewBox="0 0 24 24">
-            <path
-              fill="#000000"
-              d="M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"
-            />
-          </svg>
-          <div className="card__clock-info">
-            <svg className="card__clock" viewBox="0 0 24 24">
-              <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
+        <div
+          className="card__info-hover"
+          style={{ zIndex: "1", position: "absolute" }}
+        >
+          <div
+            className="coverArt"
+            onClick={() => {
+              window.open(track.album.images[0].url, "_blank");
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              fill="#ad7d52"
+              className="card__likebi bi-image"
+              viewBox="0 0 16 16"
+            >
+              <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+              <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
             </svg>
-            <span className="card__time">
-              {track.duration_ms > 0
-                ? `${new Date(track.duration_ms).getMinutes()}:${new Date(
-                    track.duration_ms
-                  ).getSeconds()} Minutes`
-                : `Unknown`}
-            </span>
+            <span className="coverArt">Cover art</span>
+          </div>
+
+          <div className="card__clock-info">
+            <div>
+              <svg
+                style={{ float: "left" }}
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                fill="currentColor"
+                className="bi bi-clock-fill"
+                viewBox="0 0 16 16"
+              >
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+              </svg>
+              <span className="coverArt">
+                {track.duration_ms > 0
+                  ? `${new Date(track.duration_ms).getMinutes()}:${new Date(
+                      track.duration_ms
+                    ).getSeconds()} Minutes`
+                  : `Unknown`}
+              </span>
+            </div>
           </div>
         </div>
         <div
@@ -312,11 +341,7 @@ export default function Dashboard(props) {
         </a>
         <div
           className="card__info"
-          style={
-            isFollowing.length > 0
-              ? { backgroundColor: "#FFA726" }
-              : { backgroundColor: "#fff" }
-          }
+          style={isFollowing.length > 0 ? { backgroundColor: "#FFA726" } : {}}
         >
           <span className="card__category">
             {" "}
@@ -361,13 +386,14 @@ export default function Dashboard(props) {
                   handleFollowSong(e, {
                     userID: loggedUser.id,
                     userName: loggedUser.userName,
-                    songReleaseData: track.album.release_date,
+                    songReleaseDate: track.album.release_date,
                     songPopularity: track.popularity,
                     songPic: track.album.images[0].url,
                     songName: track.name,
                     songID: track.id,
                     songArtistz: track.album.artists,
                     songAlbumName: track.album.name,
+                    songDuration: track.duration_ms
                   })
                 }
               >
@@ -383,30 +409,33 @@ export default function Dashboard(props) {
               //Already following
               <>
                 <br />
-                <svg
+                <div
                   onClick={(e) => {
                     handleUnfollowSong(e, findIntel[0].id);
                   }}
-                  style={{
-                    marginTop: "2px",
-                    color: "#C88413",
-                  }}
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-star-fill"
-                  viewBox="0 0 16 16"
                 >
-                  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                </svg>
-                <span style={{ marginLeft: "2px" }}>Following</span>
+                  <svg
+                    style={{
+                      marginTop: "2px",
+                      color: "#C88413",
+                    }}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-star-fill"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                  </svg>
+                  <span style={{ marginLeft: "2px" }}>Following</span>
+                </div>
               </>
             ) : (
               //Not following
               <>
                 <br />
-                <svg
+                <div
                   onClick={(e) =>
                     handleFollowSong(e, {
                       userID: loggedUser.id,
@@ -418,22 +447,26 @@ export default function Dashboard(props) {
                       songID: track.id,
                       songArtistz: track.album.artists,
                       songAlbumName: track.album.name,
+                      songDuration: track.duration_ms,
                     })
                   }
-                  style={{
-                    marginTop: "4px",
-                    color: "#C88413",
-                  }}
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-star"
-                  viewBox="0 0 16 16"
                 >
-                  <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
-                </svg>
-                <span style={{ marginLeft: "2px" }}>Follow</span>
+                  <svg
+                    style={{
+                      marginTop: "4px",
+                      color: "#C88413",
+                    }}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-star"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
+                  </svg>
+                  <span style={{ marginLeft: "2px" }}>Follow</span>
+                </div>
               </>
             )}
           </span>
@@ -482,15 +515,49 @@ export default function Dashboard(props) {
         //   window.open(artist.external_urls["spotify"], "_blank");
         // }}
       >
-        <div className="card__info-hover">
-          <div className="card__clock-info">
-            <svg className="card__clock" viewBox="0 0 24 24">
-              <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
+        <div
+          className="card__info-hover"
+          style={{ zIndex: "1", position: "absolute" }}
+        >
+          <div
+            className="coverArt"
+            onClick={() => {
+              window.open(artist.images[0].url, "_blank");
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              fill="#ad7d52"
+              className="card__likebi bi-image"
+              viewBox="0 0 16 16"
+            >
+              <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+              <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
             </svg>
-            <span className="card__time">
-              {artist.followers["total"] > 0 ? artist.followers["total"] : 0}
-              &nbsp;Followers
-            </span>
+            <span className="coverArt">Cover art</span>
+          </div>
+          <div className="card__clock-info">
+            <div>
+              <svg
+                style={{ float: "left" }}
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                fill="#ad7d52"
+                className="bi bi-person-fill"
+                viewBox="0 0 16 16"
+              >
+                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+              </svg>
+              <span className="coverArt">
+                {artist.followers["total"] > 0
+                  ? artist.followers["total"].toLocaleString("de-DE")
+                  : 0}
+                &nbsp;Followers
+              </span>
+            </div>
           </div>
         </div>
         <div
@@ -518,11 +585,7 @@ export default function Dashboard(props) {
         {/* Toggle if following */}
         <div
           className="card__info"
-          style={
-            isFollowing.length > 0
-              ? { backgroundColor: "#FFA726" }
-              : { backgroundColor: "#fff" }
-          }
+          style={isFollowing.length > 0 ? { backgroundColor: "#FFA726" } : {}}
         >
           <span className="card__category">
             {" "}
@@ -552,33 +615,36 @@ export default function Dashboard(props) {
               //Already following
               <>
                 <br />
-                <svg
+                <div
                   onClick={(e) => {
                     console.log("User requested to unfollow the artist:");
                     console.log(findIntel);
                     console.log(artist);
                     handleUnfollowArtist(e, findIntel[0].id);
                   }}
-                  style={{
-                    marginTop: "2px",
-                    color: "#C88413",
-                  }}
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-star-fill"
-                  viewBox="0 0 16 16"
                 >
-                  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                </svg>
-                <span style={{ marginLeft: "2px" }}>Following</span>
+                  <svg
+                    style={{
+                      marginTop: "2px",
+                      color: "#C88413",
+                    }}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-star-fill"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                  </svg>
+                  <span style={{ marginLeft: "2px" }}>Following</span>
+                </div>
               </>
             ) : (
               //Not following
               <>
                 <br />
-                <svg
+                <div
                   onClick={(e) =>
                     handleFollowArtist(e, {
                       userID: loggedUser.id,
@@ -592,20 +658,23 @@ export default function Dashboard(props) {
                       artistFollowerCount: artist.followers["total"],
                     })
                   }
-                  style={{
-                    marginTop: "4px",
-                    color: "#C88413",
-                  }}
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-star"
-                  viewBox="0 0 16 16"
                 >
-                  <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
-                </svg>
-                <span style={{ marginLeft: "2px" }}>Follow</span>
+                  <svg
+                    style={{
+                      marginTop: "4px",
+                      color: "#C88413",
+                    }}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-star"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
+                  </svg>
+                  <span style={{ marginLeft: "2px" }}>Follow</span>
+                </div>
               </>
             )}
           </span>
@@ -633,21 +702,55 @@ export default function Dashboard(props) {
         //   window.open(playlist.external_urls["spotify"], "_blank");
         // }}
       >
-        <div className="card__info-hover">
-          <svg className="card__like" viewBox="0 0 24 24">
-            <path
-              fill="#000000"
-              d="M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"
-            />
-          </svg>
-          <div className="card__clock-info">
-            <svg className="card__clock" viewBox="0 0 24 24">
-              <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
+        <div
+          className="card__info-hover"
+          style={{ zIndex: "1", position: "absolute" }}
+        >
+          <div
+            className="coverArt"
+            onClick={() => {
+              window.open(
+                playlist.images[0].url != undefined
+                  ? playlist.images[0].url
+                  : defPlaylistPic,
+                "_blank"
+              );
+              console.log(playlist.images[0].url);
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              fill="#ad7d52"
+              className="card__likebi bi-image"
+              viewBox="0 0 16 16"
+            >
+              <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+              <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
             </svg>
-            <span className="card__time">
-              Total Tracks:
-              {playlist.tracks.total > 0 ? playlist.tracks.total : 0}
-            </span>
+            <span className="coverArt">Cover art</span>
+          </div>
+          <div className="card__clock-info">
+            <div>
+              <svg
+                style={{ float: "left" }}
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                fill="#ad7d52"
+                className="bi bi-music-note-beamed"
+                viewBox="0 0 16 16"
+              >
+                <path d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13c0-1.104 1.12-2 2.5-2s2.5.896 2.5 2zm9-2c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2 2.5.895 2.5 2z" />
+                <path fillRule="evenodd" d="M14 11V2h1v9h-1zM6 3v10H5V3h1z" />
+                <path d="M5 2.905a1 1 0 0 1 .9-.995l8-.8a1 1 0 0 1 1.1.995V3L5 4V2.905z" />
+              </svg>
+              <span className="coverArt">
+                {playlist.tracks.total > 0 ? playlist.tracks.total : 0}
+                &nbsp;Total Tracks
+              </span>
+            </div>
           </div>
         </div>
         <div
@@ -663,16 +766,15 @@ export default function Dashboard(props) {
         <a href="#" className="card_link">
           <div
             className="card__img--hover"
-            style={{ backgroundImage: `url(${playlist.images[0].url})` }}
+            style={{
+              backgroundImage: `url(${playlist.images[0].url})`,
+              padding: "16px",
+            }}
           ></div>
         </a>
         <div
           className="card__info"
-          style={
-            isFollowing.length > 0
-              ? { backgroundColor: "#FFA726" }
-              : { backgroundColor: "#fff" }
-          }
+          style={isFollowing.length > 0 ? { backgroundColor: "#FFA726" } : {}}
         >
           <span className="card__category">
             {" "}
@@ -721,30 +823,33 @@ export default function Dashboard(props) {
               //Already following
               <>
                 <br />
-                <svg
+                <div
                   onClick={(e) => {
                     handleUnfollowPlaylist(e, findIntel[0].id);
                   }}
-                  style={{
-                    marginTop: "2px",
-                    color: "#C88413",
-                  }}
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-star-fill"
-                  viewBox="0 0 16 16"
                 >
-                  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                </svg>
-                <span style={{ marginLeft: "2px" }}>Following</span>
+                  <svg
+                    style={{
+                      marginTop: "2px",
+                      color: "#C88413",
+                    }}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-star-fill"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                  </svg>
+                  <span style={{ marginLeft: "2px" }}>Following</span>
+                </div>
               </>
             ) : (
               //Not following
               <>
                 <br />
-                <svg
+                <div
                   onClick={(e) =>
                     handleFollowPlaylist(e, {
                       userID: loggedUser.id,
@@ -758,20 +863,23 @@ export default function Dashboard(props) {
                       playlistUrl: playlist.external_urls["spotify"],
                     })
                   }
-                  style={{
-                    marginTop: "4px",
-                    color: "#C88413",
-                  }}
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-star"
-                  viewBox="0 0 16 16"
                 >
-                  <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
-                </svg>
-                <span style={{ marginLeft: "2px" }}>Follow</span>
+                  <svg
+                    style={{
+                      marginTop: "4px",
+                      color: "#C88413",
+                    }}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-star"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
+                  </svg>
+                  <span style={{ marginLeft: "2px" }}>Follow</span>
+                </div>
               </>
             )}
           </span>
@@ -860,8 +968,13 @@ export default function Dashboard(props) {
               .classList.add("visibilityHidden", "visibilityVisible");
           }, 0)}
       {/* PROFILE SEGMENT HERE */}
+
       {isProfile && (
-        <ProfileV2 profileIntel={profileIntel} toggleProfile={setIsProfile} />
+        <ProfileV2
+          loggedUser={loggedUser}
+          user={loggedUser}
+          toggleProfile={setIsProfile}
+        />
       )}
 
       <div className="loading--after visibilityHidden">
@@ -877,11 +990,10 @@ export default function Dashboard(props) {
               width="16"
               height="16"
               fill="currentColor"
-              className="bi bi-house-fill"
+              className="bi bi-spotify"
               viewBox="0 0 16 16"
             >
-              <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z" />
-              <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z" />
+              <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.669 11.538a.498.498 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686zm.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.362-1.194c2.905-.881 6.517-.454 8.986 1.063a.624.624 0 0 1 .206.858zm.084-2.268C10.154 5.56 5.9 5.419 3.438 6.166a.748.748 0 1 1-.434-1.432c2.825-.857 7.523-.692 10.492 1.07a.747.747 0 1 1-.764 1.288z" />
             </svg>
           </a>
           &nbsp;|&nbsp;
@@ -1022,6 +1134,47 @@ export default function Dashboard(props) {
               {toRenderPlaylistIFrame}
             </section>
             <section className="cards">{toRenderPlaylists}</section>
+            <div
+              id="footer"
+              style={{
+                textAlign: "center",
+                marginTop: "5px",
+                marginBottom: "7px",
+              }}
+            >
+              <span className="madeBy">
+                Made with passion by&nbsp;
+                <a
+                  onClick={(e) => {
+                    handleNihilGitHub(e, {
+                      userID: loggedUser.id,
+                      userName: loggedUser.userName,
+                    });
+                    window.open("https://github.com/Nihilnia", "_blank");
+                  }}
+                >
+                  Nihil
+                </a>
+                &nbsp;
+                <svg
+                  onClick={(e) => {
+                    handleNihilGitHub(e, {
+                      userID: loggedUser.id,
+                      userName: loggedUser.userName,
+                    });
+                    window.open("https://github.com/Nihilnia", "_blank");
+                  }}
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  fill="currentColor"
+                  className="bi bi-github"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                </svg>
+              </span>
+            </div>
           </>
         )}
       </div>

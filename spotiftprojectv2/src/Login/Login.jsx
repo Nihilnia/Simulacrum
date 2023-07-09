@@ -6,8 +6,14 @@ export default function Login(props) {
   document.body.classList.remove("body--register");
   document.body.classList.add("body--login");
 
-  const { handleInputChange, handleUserEnter, handlePaging, modal, setModal } =
-    props;
+  const {
+    handleInputChange,
+    handleUserEnter,
+    handlePaging,
+    modal,
+    setModal,
+    setUserInput,
+  } = props;
 
   // console.log("Modal is:" + showModal);
 
@@ -18,7 +24,7 @@ export default function Login(props) {
         <div className="shape--login"></div>
         <div className="shape--login"></div>
       </div>
-      <form className="form--login" onKeyPress={(e) => handleUserEnter(e)}>
+      <form className="form--login" onSubmit={(e) => handleUserEnter(e)}>
         <h3>Login Here</h3>
 
         <label htmlFor="username" className="label--login">
@@ -45,7 +51,13 @@ export default function Login(props) {
           required
         />
 
-        <button className="button--login" onClick={(e) => handleUserEnter(e)}>
+        <button
+          className="button--login"
+          onClick={(e) => {
+            e.preventDefault();
+            handleUserEnter(e);
+          }}
+        >
           Log In
         </button>
         <a

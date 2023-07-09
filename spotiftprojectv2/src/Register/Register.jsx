@@ -15,7 +15,7 @@ export default function Register(props) {
         <div className="shape--register"></div>
         <div className="shape--register"></div>
       </div>
-      <form className="form--register" onKeyPress={(e) => handleUserEnter(e)}>
+      <form className="form--register" onSubmit={(e) => handleUserEnter(e)}>
         <h3>Register Here</h3>
 
         <label htmlFor="username" className="label--register">

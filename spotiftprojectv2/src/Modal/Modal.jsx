@@ -1,9 +1,40 @@
 import "./Modal.css";
 import userNotFound from "./userNotFound.png";
+import userNameTaken from "./userNameTaken.png";
 import wrongPass from "./wrongPass.png";
+import confetti from "./confetti.png";
 
 export default function Modal(props) {
   const { modal, setModal } = props;
+
+  let svgToShow = null;
+  let informationToShow = null;
+  let gestureToShow = null;
+  switch (modal.information) {
+    case "User not found":
+      svgToShow = userNotFound;
+      informationToShow = "User not found.";
+      gestureToShow = "Try again";
+      break;
+
+    case "This username is taken":
+      svgToShow = userNameTaken;
+      informationToShow = "This username is taken";
+      gestureToShow = "Try again";
+      break;
+
+    case "Password is wrong":
+      svgToShow = wrongPass;
+      informationToShow = "Password is wrong";
+      gestureToShow = "Try again";
+      break;
+
+    case "Successfuly registered.":
+      svgToShow = confetti;
+      informationToShow = "Successfuly registered.";
+      gestureToShow = "Nice!";
+      break;
+  }
 
   return (
     <>
@@ -13,19 +44,16 @@ export default function Modal(props) {
             <button className="close" onClick={() => setModal((prev) => !prev)}>
               ✖
             </button>
-            {modal.information == "User not found." ? (
-              <img src={userNotFound} alt="cookies-img" />
-            ) : (
-              <img src={wrongPass} alt="cookies-img" />
-            )}
+            <img src={svgToShow} alt="cookies-img" />
             <p>
-              {modal.information} <br />"{modal.userName}"
+              {informationToShow} <br />
+              <i>"{modal.userName}"</i>
             </p>
             <button
               className="accept"
               onClick={() => setModal((prev) => !prev)}
             >
-              Try again!
+              {gestureToShow}
             </button>
           </div>
         </div>

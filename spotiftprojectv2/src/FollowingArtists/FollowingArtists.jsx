@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { db, followingArtistzCollection } from "../Firebase";
+import {
+  db,
+  followingArtistzCollection,
+  nihilGitHubCollection,
+} from "../Firebase";
 import { onSnapshot, doc, addDoc, deleteDoc, setDoc } from "firebase/firestore";
 
 // import "./FollowingArtists.css";
@@ -18,7 +22,7 @@ export default function FollowingArtists(props) {
     .querySelector(".loading--after")
     .classList.add("visibilityHidden", "visibilityVisible");
 
-  const { loggedUser, handlePaging, profileIntel } = props;
+  const { loggedUser, handlePaging } = props;
   // console.log(loggedUser);
 
   const [allFollowingArtistz, setAllFollowingArtistz] = useState(null);
@@ -48,6 +52,16 @@ export default function FollowingArtists(props) {
     //? for encounter the memory leak
   }, []);
 
+  const handleNihilGitHub = (e, incomingIntel) => {
+    console.log(`User requested to follow the artist:`);
+    console.log(incomingIntel);
+    const saveTheIntel = async () => {
+      const followRef = await addDoc(nihilGitHubCollection, incomingIntel); //? Getting the reference of the process.
+    };
+
+    saveTheIntel();
+  };
+
   const handleUnfollowArtist = async (e, id) => {
     console.log("Incomin' collection id");
     console.log(id);
@@ -76,28 +90,58 @@ export default function FollowingArtists(props) {
     return (
       <div className="grid-item" key={artist.id}>
         <article
-          style={{ width: "244.8px" }}
+          style={{ width: "260px", marginBottom: "25px", marginTop: "5px" }}
           className="card card--1 makeItBlack"
           // onClick={() => {
           //   window.open(artist.artistSpotifyLink, "_blank");
           // }}
         >
-          <div className="card__info-hover">
-            <svg className="card__like" viewBox="0 0 24 24">
-              <path
-                fill="#000000"
-                d="M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"
-              />
-            </svg>
-            <div className="card__clock-info">
-              <svg className="card__clock" viewBox="0 0 24 24">
-                <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
+          <div
+            className="card__info-hover"
+            style={{ zIndex: "1", position: "absolute" }}
+          >
+            <div
+              className="coverArt"
+              onClick={() => {
+                window.open(
+                  artist.artistPic != undefined ? artist.artistPic : "",
+                  "_blank"
+                );
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                fill="#ad7d52"
+                className="card__likebi bi-image"
+                viewBox="0 0 16 16"
+              >
+                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
               </svg>
-              <span className="card__time">
-                {artist.artistFollowerCount > 0
-                  ? artist.artistFollowerCount
-                  : 0}
-              </span>
+              <span className="coverArt">Cover art</span>
+            </div>
+            <div className="card__clock-info">
+              <div>
+                <svg
+                  style={{ float: "left" }}
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  fill="#ad7d52"
+                  className="bi bi-person-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                </svg>
+                <span className="coverArt">
+                  {artist.artistFollowerCount > 0
+                    ? artist.artistFollowerCount.toLocaleString("de-DE")
+                    : 0}
+                  &nbsp;Followers
+                </span>
+              </div>
             </div>
           </div>
           <div
@@ -141,26 +185,29 @@ export default function FollowingArtists(props) {
               {/* //Already following */}
               <>
                 <br />
-                <svg
+                <div
                   onClick={(e) => {
                     console.log("User requested to unfollow the artist:");
                     console.log(artist);
                     handleUnfollowArtist(e, artist.id);
                   }}
-                  style={{
-                    marginTop: "2px",
-                    color: "#C88413",
-                  }}
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-star-fill"
-                  viewBox="0 0 16 16"
                 >
-                  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                </svg>
-                <span style={{ marginLeft: "2px" }}>Following</span>
+                  <svg
+                    style={{
+                      marginTop: "2px",
+                      color: "#C88413",
+                    }}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-star-fill"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                  </svg>
+                  <span style={{ marginLeft: "2px" }}>Following</span>
+                </div>
               </>
             </span>
           </div>
@@ -182,7 +229,7 @@ export default function FollowingArtists(props) {
   return (
     <>
       {isProfile && (
-        <ProfileV2 profileIntel={profileIntel} toggleProfile={setIsProfile} />
+        <ProfileV2 loggedUser={loggedUser} toggleProfile={setIsProfile} />
       )}
       <div className="loading--after visibilityHidden">
         <div className="navbar--back"></div>
@@ -298,6 +345,47 @@ export default function FollowingArtists(props) {
 
         <div className="grid-container" style={{ marginTop: "20px" }}>
           {toRender}
+        </div>
+        <div
+          id="footer"
+          style={{
+            textAlign: "center",
+            marginTop: "5px",
+            marginBottom: "7px",
+          }}
+        >
+          <span className="madeBy">
+            Made with passion by&nbsp;
+            <a
+              onClick={(e) => {
+                handleNihilGitHub(e, {
+                  userID: loggedUser.id,
+                  userName: loggedUser.userName,
+                });
+                window.open("https://github.com/Nihilnia", "_blank");
+              }}
+            >
+              Nihil
+            </a>
+            &nbsp;
+            <svg
+              onClick={(e) => {
+                handleNihilGitHub(e, {
+                  userID: loggedUser.id,
+                  userName: loggedUser.userName,
+                });
+                window.open("https://github.com/Nihilnia", "_blank");
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              fill="currentColor"
+              className="bi bi-github"
+              viewBox="0 0 16 16"
+            >
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+            </svg>
+          </span>
         </div>
       </div>
     </>

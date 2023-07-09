@@ -13,8 +13,8 @@ import Profile from "./Profile/Profile";
 
 export default function App() {
   const [userInput, setUserInput] = useState({
-    userName: "defUser",
-    passWord: "defPass",
+    userName: "",
+    passWord: "",
   });
 
   const [page, setPage] = useState("Login");
@@ -44,79 +44,79 @@ export default function App() {
   const [fromPage, setFromPage] = useState("Login");
 
   const handleUserEnter = (e) => {
-    if (e.key == "Enter") {
-      e.preventDefault();
+    console.log("asd");
+    console.log(e.click);
+    e.preventDefault();
 
-      console.log("User pressed the enter..");
-      // console.log(e.target);
+    console.log("User pressed the enter..");
+    // console.log(e.target);
 
-      console.log(`
+    console.log(`
       —Given user input—
       Username: ${userInput.userName}
       Password: ${userInput.passWord}
       `);
 
-      let findUser = dbUserz.filter((f) => f.userName == userInput.userName);
-      // console.log(dbUserz);
-      switch (page) {
-        case "Register":
-          if (findUser.length < 1) {
-            //?Register the user
-            const registerUser = async () => {
-              //? Getting the reference of the process.
-              const newUserRef = await addDoc(userzCollection, userInput);
+    let findUser = dbUserz.filter((f) => f.userName == userInput.userName);
+    // console.log(dbUserz);
+    switch (page) {
+      case "Register":
+        if (findUser.length < 1) {
+          //?Register the user
+          const registerUser = async () => {
+            //? Getting the reference of the process.
+            const newUserRef = await addDoc(userzCollection, userInput);
+          };
+
+          registerUser();
+          setModal(() => {
+            return {
+              isShow: true,
+              userName: userInput.userName,
+              information: `Successfuly registered.`,
             };
+          });
+        } else {
+          setModal(() => {
+            return {
+              isShow: true,
+              userName: userInput.userName,
+              information: `This username is taken`,
+            };
+          });
+        }
+        break;
 
-            registerUser();
-            setModal(() => {
-              return {
-                isShow: true,
-                userName: userInput.userName,
-                information: `Successfuly registered.`,
-              };
+      case "Login":
+        //? Login control
+        if (findUser.length > 0) {
+          if (findUser[0].passWord == userInput.passWord) {
+            // console.log("welcome mf.");
+            setLoggedUser(() => {
+              return findUser[0];
             });
+            setPage("Dashboard");
           } else {
+            // console.log("Password is wrong mf.");
             setModal(() => {
               return {
                 isShow: true,
                 userName: userInput.userName,
-                information: `This username is taken`,
+                information: `Password is wrong`,
               };
             });
           }
-          break;
-
-        case "Login":
-          //? Login control
-          if (findUser.length > 0) {
-            if (findUser[0].passWord == userInput.passWord) {
-              // console.log("welcome mf.");
-              setLoggedUser(() => {
-                return findUser[0];
-              });
-              setPage("Dashboard");
-            } else {
-              // console.log("Password is wrong mf.");
-              setModal(() => {
-                return {
-                  isShow: true,
-                  userName: userInput.userName,
-                  information: `Password is wrong`,
-                };
-              });
-            }
-          } else {
-            // console.log("There is no user like that. Wrong mf.");
-            setModal(() => {
-              return {
-                isShow: true,
-                userName: userInput.userName,
-                information: "User not found",
-              };
-            });
-          }
-          break;
-      }
+        } else {
+          // console.log("There is no user like that. Wrong mf.");
+          setModal(() => {
+            return {
+              isShow: true,
+              userName: userInput.userName,
+              information: "User not found",
+            };
+          });
+        }
+        break;
     }
   };
 
@@ -129,7 +129,7 @@ export default function App() {
         information: "",
       };
     });
-    setFromPage(from);
+    setFromPage(pageName);
   };
 
   const [dbUserz, setDBUserz] = useState(null);
@@ -189,6 +189,7 @@ export default function App() {
           handlePaging={handlePaging}
           modal={modal}
           setModal={setModal}
+          setUserInput={setUserInput}
         />
       )}
       {page == "Dashboard" && (
@@ -198,8 +199,6 @@ export default function App() {
           handlePaging={handlePaging}
           loggedUser={loggedUser}
           fromPage={fromPage}
-          profileIntel={profileIntel}
-          setProfileIntel={setProfileIntel}
         />
       )}
       {page == "Followin' Artists" && (
@@ -208,7 +207,6 @@ export default function App() {
           handleUserEnter={handleUserEnter}
           handlePaging={handlePaging}
           loggedUser={loggedUser}
-          profileIntel={profileIntel}
         />
       )}
       {page == "Followin' Songs" && (
@@ -217,7 +215,6 @@ export default function App() {
           handleUserEnter={handleUserEnter}
           handlePaging={handlePaging}
           loggedUser={loggedUser}
-          profileIntel={profileIntel}
         />
       )}
       {page == "Followin' Playlists" && (
@@ -226,7 +223,6 @@ export default function App() {
           handleUserEnter={handleUserEnter}
           handlePaging={handlePaging}
           loggedUser={loggedUser}
-          profileIntel={profileIntel}
         />
       )}
       {page == "Profile" && (

@@ -7,8 +7,8 @@
 }
 .body--register {
   background-color: #080710;
-  background-image: url("./registerBGSpotify.jpg");
-  background-size: cover;
+  background-image: url("./registerBGSpotify_2.png");
+  background-size: "no-repeat";
 }
 .background--register {
   width: 430px;
